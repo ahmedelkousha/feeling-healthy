@@ -34,6 +34,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://feeling-healthy.vercel.app"
+  ),
   title: "Feeling Healthy — Holistic Health & Wellbeing",
   description:
     "Feeling Healthy is a holistic health and wellbeing centre offering massage, counselling, naturopathy, nutrition and more.",
@@ -43,21 +46,12 @@ export const metadata: Metadata = {
       "Feeling Healthy is a holistic health and wellbeing centre offering massage, counselling, naturopathy, nutrition and more.",
     siteName: "Feeling Healthy",
     type: "website",
-    images: [
-      {
-        url: "/og.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Feeling Healthy — Holistic Health & Wellbeing",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Feeling Healthy — Holistic Health & Wellbeing",
     description:
       "Feeling Healthy is a holistic health and wellbeing centre offering massage, counselling, naturopathy, nutrition and more.",
-    images: ["/og.jpg"],
   },
   icons: {
     icon: "/favicon.ico",
