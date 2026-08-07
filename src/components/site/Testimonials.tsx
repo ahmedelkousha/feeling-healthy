@@ -33,7 +33,7 @@ export function Testimonials() {
               swiperRef.current = swiper;
             }}
             modules={[Navigation, Pagination, Autoplay]}
-            autoplay={{ delay: 3000, disableOnInteraction: true }}
+            autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true }}
             pagination={{ clickable: true, el: ".swiper-pagination-custom" }}
             loop={true}
             spaceBetween={24}
@@ -47,7 +47,7 @@ export function Testimonials() {
           >
             {testimonials.map((t, i) => (
               <SwiperSlide key={i} className="h-auto!">
-                <div className="group relative flex h-full flex-col justify-between rounded-lg bg-card p-8 shadow-soft transition-all duration-500 hover:scale-95 hover:shadow-lift border border-border/50">
+                <div className="group relative flex h-full flex-col justify-between rounded-lg bg-card p-8 shadow-soft transition-all duration-500 hover:shadow-lift border border-border/50">
                   <Quote className="absolute top-6 right-6 size-10 text-brand/25 transition-transform duration-500 group-hover:scale-110" />
 
                   <div>

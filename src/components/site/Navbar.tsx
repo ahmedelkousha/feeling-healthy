@@ -3,20 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, ChevronDown, ArrowRight, MapPin, Phone, Mail, Clock } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowRight, MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { bookCta, AboutUsNav, primaryNav, site } from "@/data/site";
 import { serviceCategories, services, type Service } from "@/data/services";
 import { cn } from "@/lib/utils";
 import { useLinkClickEvent } from "@/hooks/useLinkClickEvent";
 
+const socialIcons = { Facebook, Instagram, LinkedIn: Linkedin } as const;
+
 export function Navbar() {
   const handleLinkClick = useLinkClickEvent();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const [mobileStoryOpen, setMobileStoryOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [storyDropdownOpen, setStoryDropdownOpen] = useState(false);
   const [hoveredService, setHoveredService] = useState<Service | null>(null);
@@ -25,8 +26,6 @@ export function Navbar() {
     setOpen(false);
     setDropdownOpen(false);
     setStoryDropdownOpen(false);
-    setMobileServicesOpen(false);
-    setMobileStoryOpen(false);
     if (callback) callback();
   };
   const pathname = usePathname();
@@ -362,146 +361,75 @@ export function Navbar() {
       {/* Mobile Slide Menu (Modern, Unique & Organized Drawer) */}
       <div
         className={cn(
-          "fixed inset-0 z-50 flex flex-col bg-background/98 backdrop-blur-2xl lg:hidden transition-all duration-500 ease-[var(--ease-calm)] pt-22 sm:pt-30", open ? "translate-x-0" : "translate-x-full pointer-events-none",
+          "fixed inset-0 z-50 flex flex-col bg-background backdrop-blur-2xl lg:hidden transition-all duration-500 ease-[var(--ease-calm)] pt-22 sm:pt-30", open ? "translate-x-0" : "translate-x-full pointer-events-none",
         )}
       >
         {/* Scrollable Content Body */}
         <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
-          {/* Quick Contact Chips */}
-          <div className="grid grid-cols-2 gap-2.5">
-            <a
-              href={`tel:${site.contact.phone}`}
-              className="flex items-center gap-2.5 rounded-2xl border border-border/80 bg-card p-3 shadow-xs transition-all active:scale-98 hover:border-brand"
-            >
-              <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand text-ink font-semibold">
-                <Phone className="size-4" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[0.65rem] font-bold uppercase tracking-wider text-muted-foreground">Call Us</p>
-                <p className="truncate text-xs font-semibold text-foreground">{site.contact.phone}</p>
-              </div>
-            </a>
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.contact.mapsQuery)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2.5 rounded-2xl border border-border/80 bg-card p-3 shadow-xs transition-all active:scale-98 hover:border-brand"
-            >
-              <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand text-ink font-semibold">
-                <MapPin className="size-4" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[0.65rem] font-bold uppercase tracking-wider text-muted-foreground">Location</p>
-                <p className="truncate text-xs font-semibold text-foreground">Tweed Heads</p>
-              </div>
-            </a>
-          </div>
+          
 
-          {/* Navigation Accordions List */}
+          {/* Navigation Accordions List using Radix UI Accordion */}
           <nav className="space-y-3" aria-label="Mobile Navigation">
-            {/* Services Accordion Card */}
-            <div className="rounded-2xl border border-border/80 bg-card/60 overflow-hidden transition-all">
-              <button
-                type="button"
-                onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                className="flex w-full items-center justify-between p-4 text-left font-display text-xl font-semibold text-foreground cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="grid size-7 place-items-center rounded-lg bg-brand/20 text-xs font-bold text-ink-foreground">16</span>
+            <Accordion collapsible type="single" className="w-full space-y-3">
+              {/* Services Accordion Card */}
+              <AccordionItem value="services" className="rounded-sm border border-border/80 bg-card overflow-hidden">
+                <AccordionTrigger className="p-4 font-display text-xl font-semibold text-foreground hover:no-underline py-4">
                   <span>Services</span>
-                </div>
-                <ChevronDown
-                  className={cn(
-                    "size-5 text-muted-foreground transition-transform duration-250",
-                    mobileServicesOpen && "rotate-180 text-foreground",
-                  )}
-                />
-              </button>
+                </AccordionTrigger>
 
-              {mobileServicesOpen && (
-                <div className="border-t border-border/60 bg-background/50 p-4 space-y-5 animate-in fade-in slide-in-from-top-1 duration-500">
-                  {serviceCategories.map((cat) => {
-                    const catServices = services.filter((s) => s.category === cat.id);
-                    return (
-                      <div key={cat.id} className="space-y-2">
-                        <h5 className="text-[0.7rem] font-bold uppercase tracking-wider text-brand-foreground/90 bg-brand/30 rounded-md px-2 py-0.5 w-fit">
-                          {cat.title}
-                        </h5>
-                        <ul className="grid grid-cols-1 gap-1 pt-1">
-                          {catServices.map((s) => (
-                            <li key={s.slug}>
-                              <Link
-                                href={`/services/${s.slug}`}
-                                onClick={(e) => handleLinkClick(e, `/services/${s.slug}`, closeAllMenus)}
-                                className="group flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium text-foreground/90 transition-all hover:bg-sand hover:text-foreground"
-                              >
-                                <span>{s.name}</span>
-                                <ArrowRight className="size-3.5 opacity-40 transition-all group-hover:opacity-100 group-hover:translate-x-0.5 text-brand-dark" />
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    );
-                  })}
-                  <div className="pt-2 border-t border-border/40">
+                <AccordionContent className="border-t border-border/60 bg-background/50 p-3 space-y-2 pb-3">
+                  <Accordion type="multiple" className="w-full space-y-2">
+                    {serviceCategories.map((cat) => {
+                      const catServices = services.filter((s) => s.category === cat.id);
+                      return (
+                        <AccordionItem
+                          key={cat.id}
+                          value={cat.id}
+                          className="rounded-sm border border-border/60 bg-card overflow-hidden"
+                        >
+                          <AccordionTrigger className="px-3.5 py-2.5 hover:no-underline text-left text-[0.75rem] font-bold uppercase tracking-wider text-foreground/90">
+                            {cat.title}
+                          </AccordionTrigger>
+
+                          <AccordionContent className="border-t border-border/50 bg-background/40 p-2 pb-2">
+                            <ul className="space-y-1">
+                              {catServices.map((s) => (
+                                <li key={s.slug}>
+                                  <Link
+                                    href={`/services/${s.slug}`}
+                                    onClick={(e) => handleLinkClick(e, `/services/${s.slug}`, closeAllMenus)}
+                                    className="group flex items-center justify-between rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-all hover:bg-sand hover:text-foreground"
+                                  >
+                                    <span>{s.name}</span>
+                                    <ArrowRight className="size-3.5 opacity-40 transition-all group-hover:opacity-100 group-hover:translate-x-0.5 text-brand-dark" />
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
+                  <div className="pt-1 border-t border-border/40">
                     <Link
                       href="/services"
                       onClick={(e) => handleLinkClick(e, "/services", closeAllMenus)}
-                      className="flex items-center justify-center gap-1.5 rounded-xl bg-ink/5 py-2.5 text-xs font-semibold text-foreground hover:bg-ink/10 transition-colors"
+                      className="flex items-center justify-center gap-1.5 rounded-sm bg-ink/5 py-2 text-xs font-semibold text-foreground hover:bg-ink/10 transition-colors"
                     >
                       View All {services.length} Services <ArrowRight className="size-3.5" />
                     </Link>
                   </div>
-                </div>
-              )}
-            </div>
+                </AccordionContent>
+              </AccordionItem>
 
-            {/* PEMF / THz Direct Link Card */}
-            <div className="rounded-2xl border border-border/80 bg-card/60 overflow-hidden">
-              <Link
-                href="/pemf-thz"
-                onClick={(e) => handleLinkClick(e, "/pemf-thz", closeAllMenus)}
-                className="flex items-center justify-between p-4 font-display text-xl font-semibold text-foreground hover:bg-sand/60 transition-colors"
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="grid size-7 place-items-center rounded-lg bg-brand/20 text-xs font-bold text-ink-foreground">New</span>
-                  <span>PEMF / THz</span>
-                </div>
-                <ArrowRight className="size-5 text-muted-foreground" />
-              </Link>
-            </div>
+              {/* About Us Accordion Card */}
+              <AccordionItem value="about" className="rounded-sm border border-border/80 bg-card overflow-hidden">
+                <AccordionTrigger className="p-4 font-display text-xl font-semibold text-foreground hover:no-underline py-4">
+                  <span>About Us</span>
+                </AccordionTrigger>
 
-            {/* Your Wellbeing Direct Link Card */}
-            <div className="rounded-2xl border border-border/80 bg-card/60 overflow-hidden">
-              <Link
-                href="/your-wellbeing"
-                onClick={(e) => handleLinkClick(e, "/your-wellbeing", closeAllMenus)}
-                className="flex items-center justify-between p-4 font-display text-xl font-semibold text-foreground hover:bg-sand/60 transition-colors"
-              >
-                <span>Your Wellbeing</span>
-                <ArrowRight className="size-5 text-muted-foreground" />
-              </Link>
-            </div>
-
-            {/* About Us Accordion Card */}
-            <div className="rounded-2xl border border-border/80 bg-card/60 overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setMobileStoryOpen(!mobileStoryOpen)}
-                className="flex w-full items-center justify-between p-4 text-left font-display text-xl font-semibold text-foreground cursor-pointer"
-              >
-                <span>About Us</span>
-                <ChevronDown
-                  className={cn(
-                    "size-5 text-muted-foreground transition-transform duration-250",
-                    mobileStoryOpen && "rotate-180 text-foreground",
-                  )}
-                />
-              </button>
-
-              {mobileStoryOpen && (
-                <div className="border-t border-border/60 bg-background/50 p-2 space-y-1 animate-in fade-in slide-in-from-top-1 duration-500">
+                <AccordionContent className="border-t border-border/60 bg-background/50 p-2 space-y-1 pb-2">
                   {AboutUsNav.map((subItem) => (
                     <Link
                       key={subItem.to}
@@ -518,13 +446,67 @@ export function Navbar() {
                       </span>
                     </Link>
                   ))}
-                </div>
-              )}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+
+            {/* PEMF / THz Direct Link Card */}
+            <div className="rounded-sm border border-border/80 bg-card overflow-hidden">
+              <Link
+                href="/pemf-thz"
+                onClick={(e) => handleLinkClick(e, "/pemf-thz", closeAllMenus)}
+                className="flex items-center justify-between p-4 font-display text-xl font-semibold text-foreground hover:bg-sand/60 transition-colors"
+              >
+                <span>PEMF / THz</span>
+                <ArrowRight className="size-5 text-muted-foreground" />
+              </Link>
+            </div>
+
+            {/* Your Wellbeing Direct Link Card */}
+            <div className="rounded-sm border border-border/80 bg-card overflow-hidden">
+              <Link
+                href="/your-wellbeing"
+                onClick={(e) => handleLinkClick(e, "/your-wellbeing", closeAllMenus)}
+                className="flex items-center justify-between p-4 font-display text-xl font-semibold text-foreground hover:bg-sand/60 transition-colors"
+              >
+                <span>Your Wellbeing</span>
+                <ArrowRight className="size-5 text-muted-foreground" />
+              </Link>
             </div>
           </nav>
 
+{/* Quick Contact Chips */}
+          <div className="grid grid-cols-2 gap-2.5">
+            <a
+              href={`tel:${site.contact.phone}`}
+              className="flex items-center gap-2.5 rounded-sm border border-border/80 bg-card p-3 shadow-xs transition-all active:scale-98 hover:border-brand"
+            >
+              <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand text-ink font-semibold">
+                <Phone className="size-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[0.65rem] font-bold uppercase tracking-wider text-muted-foreground">Call Us</p>
+                <p className="truncate text-xs font-semibold text-foreground">{site.contact.phone}</p>
+              </div>
+            </a>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.contact.mapsQuery)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2.5 rounded-sm border border-border/80 bg-card p-3 shadow-xs transition-all active:scale-98 hover:border-brand"
+            >
+              <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand text-ink font-semibold">
+                <MapPin className="size-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[0.65rem] font-bold uppercase tracking-wider text-muted-foreground">Location</p>
+                <p className="truncate text-xs font-semibold text-foreground">Tweed Heads</p>
+              </div>
+            </a>
+          </div>
+
           {/* Footer Info Card inside Drawer */}
-          <div className="rounded-3xl border border-brand/40 bg-sand/60 p-5 space-y-3">
+          <div className="rounded-sm border border-brand/40 bg-sand/60 p-5 space-y-3">
             <div className="flex items-center gap-2 text-xs font-medium text-foreground/80">
               <Clock className="size-4 text-brand-dark shrink-0" />
               <span>Mon–Sat 9:00am – 5:00pm</span>
@@ -536,24 +518,28 @@ export function Navbar() {
               <span className="text-[0.7rem] font-bold uppercase tracking-wider text-muted-foreground">
                 Follow Us
               </span>
-              <div className="flex items-center gap-3">
-                {site.social.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-semibold text-foreground hover:text-brand-dark hover:underline"
-                  >
-                    {s.label}
-                  </a>
-                ))}
+              <div className="flex items-center gap-2">
+                {site.social.map((s) => {
+                  const Icon = socialIcons[s.label as keyof typeof socialIcons];
+                  return (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      aria-label={s.label}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="grid size-8 place-items-center rounded-full border border-border/80 bg-card text-foreground transition-all hover:border-brand hover:bg-brand hover:text-brand-foreground"
+                    >
+                      {Icon ? <Icon className="size-4" /> : <span className="text-xs font-semibold">{s.label}</span>}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="sticky top-0 z-10 flex items-center justify-end border-b border-border/60 bg-background/95 px-5 py-3.5 backdrop-blur-md">
+        <div className="sticky top-0 z-10 flex items-center justify-start border-b border-border/60 bg-background/95 px-5 py-3.5 backdrop-blur-md">
          
           <div className="flex items-center gap-2.5">
             <Button asChild size="sm" onClick={() => setOpen(false)}>
