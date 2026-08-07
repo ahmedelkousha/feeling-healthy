@@ -9,7 +9,7 @@ export function Hero() {
 
   return (
     <section
-      className="relative min-h-[500px] sm:min-h-[600px] lg:min-h-[750px] flex items-center overflow-hidden py-16 md:py-24 bg-cover bg-center lg:bg-fixed bg-[url('/images/hero-consultation.jpg')] lg:bg-[url('/images/hero-rosanna.png')]"
+      className="relative min-h-[calc(100svh-85px)] sm:min-h-[calc(100svh-112px)] lg:min-h-[calc(100svh-112px)] flex items-center overflow-hidden py-16 md:py-24 bg-cover bg-center lg:bg-fixed bg-[url('/images/hero-consultation.jpg')] lg:bg-[url('/images/hero-rosanna.png')]"
     >
       {/* Gradient Overlay for Text Legibility */}
       <div className="absolute inset-0 bg-gradient-to-r from-ink/50 via-ink/40 to-ink/35" />

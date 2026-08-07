@@ -6,10 +6,10 @@ import { Hero, ApproachSection } from "@/components/site/HomeSections";
 import { Section, SectionHeading } from "@/components/site/Section";
 import { Reveal } from "@/components/site/Reveal";
 import { CategoryCard } from "@/components/site/CategoryCard";
-import { ServiceCard } from "@/components/site/ServiceCard";
 import { PractitionerCard } from "@/components/site/PractitionerCard";
 import { ServiceFinder } from "@/components/site/ServiceFinder";
 import { Testimonials } from "@/components/site/Testimonials";
+import { ServicesSlider } from "@/components/site/ServicesSlider";
 import { LocationSection } from "@/components/site/LocationSection";
 import { CtaSection } from "@/components/site/CtaSection";
 import { featuredServices, helpCategories } from "@/data/services";
@@ -71,29 +71,7 @@ export default function Home() {
 
       <ApproachSection href="/about" buttonText="Get To Know Us" reversed={false}/>
 
-      <Section>
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="Our Services"
-            title="Explore Our Services"
-            description="A range of holistic services under one roof, so your care can join up around you."
-          />
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredServices.map((service, i) => (
-              <Reveal key={service.slug} delay={i * 70}>
-                <ServiceCard service={service} />
-              </Reveal>
-            ))}
-          </div>
-          <Reveal className="mt-10">
-            <Button asChild variant="ink" size="default">
-              <Link href="/services">
-                View All Services <ArrowRight />
-              </Link>
-            </Button>
-          </Reveal>
-        </div>
-      </Section>
+      <ServicesSlider />
       <SubscriptionSection />
 
       <Section tone="white">

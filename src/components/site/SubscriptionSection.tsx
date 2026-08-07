@@ -46,8 +46,8 @@ export function SubscriptionSection() {
           {/* Right Column: Subscription Form / Success State */}
           <Reveal className="justify-items-center" delay={100}>
             {submitted ? (
-              <div className="rounded-2xl bg-ink/10 backdrop-blur-sm p-6 sm:p-8 text-left animate-in fade-in duration-300 border border-ink/15">
-                <div className="grid size-12 place-items-center rounded-full bg-ink text-brand mb-4 shadow-sm">
+              <div className="rounded-2xl bg-card backdrop-blur-sm p-6 sm:p-8 text-left animate-in fade-in duration-300 border border-ink/15">
+                <div className="grid size-12 place-items-center rounded-full bg-brand text-brand-foreground mb-4 shadow-sm">
                   <CheckCircle2 className="size-7" />
                 </div>
                 <h4 className="font-display text-xl font-bold text-brand-foreground">
@@ -79,7 +79,7 @@ export function SubscriptionSection() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                  <Button type="submit" variant="ink" size="default" className="h-12 px-4 font-bold gap-2 cursor-pointer w-full sm:w-auto shadow-soft">
+                  <Button type="submit" variant="ink" size="default" className="px-4 font-bold gap-2 cursor-pointer w-full sm:w-auto shadow-soft">
                     <Send className="size-4" />
                     <span className="font-medium">Subscribe Now</span>
                   </Button>
