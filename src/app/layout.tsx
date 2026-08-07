@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og.jpg",
+        url: "https://feeling-healthy.vercel.app/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "Feeling Healthy — Holistic Health & Wellbeing",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     title: "Feeling Healthy — Holistic Health & Wellbeing",
     description:
       "Feeling Healthy is a holistic health and wellbeing centre offering massage, counselling, naturopathy, nutrition and more.",
-    images: ["/og.jpg"],
+    images: ["https://feeling-healthy.vercel.app/opengraph-image.jpg"],
   },
   icons: {
     icon: "/favicon.ico",
