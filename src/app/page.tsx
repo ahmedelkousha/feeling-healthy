@@ -38,11 +38,13 @@ export const metadata: Metadata = {
 
 import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { WelcomeSection } from "@/components/site/WelcomeSection";
+import { StatsSection } from "@/components/site/StatsSection";
 
 export default function Home() {
   return (
     <>
       <Hero />
+      <StatsSection />
       <WelcomeSection />
 
       {/* <Section tone="sand">
@@ -69,7 +71,7 @@ export default function Home() {
         </div>
       </Section> */}
 
-      <ApproachSection href="/about" buttonText="Get To Know Us" reversed={false}/>
+      <ApproachSection href="/about" buttonText="Get To Know Us" reversed={false} />
 
       <ServicesSlider />
       <SubscriptionSection />
@@ -100,7 +102,6 @@ export default function Home() {
 
       <ServiceFinder />
       <Testimonials />
-
 
       <Section tone="white">
         <LocationSection />

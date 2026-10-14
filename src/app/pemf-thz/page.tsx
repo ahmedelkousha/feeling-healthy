@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   Check,
- Activity,
+  Activity,
   Battery,
   Brain,
   CheckCircle,
@@ -20,7 +20,6 @@ import { PageHero } from "@/components/site/PageHero";
 import { Section, SectionHeading } from "@/components/site/Section";
 import { Reveal } from "@/components/site/Reveal";
 import { CtaSection } from "@/components/site/CtaSection";
-import { LocationSection } from "@/components/site/LocationSection";
 import {
   Accordion,
   AccordionContent,
@@ -38,9 +37,7 @@ import { PemfThzProducts } from "@/components/site/PemfThzProducts";
 import { PemfThzOrderForm } from "@/components/site/PemfThzOrderForm";
 
 export default function PemfThzPage() {
-  const [selectedProductId, setSelectedProductId] = useState<string>(
-    pemfThzProducts[0].id,
-  );
+  const [selectedProductId, setSelectedProductId] = useState<string>(pemfThzProducts[0].id);
 
   const iconsMap = {
     ShieldCheck: <ShieldCheck className="size-6 text-brand-dark" />,
@@ -96,11 +93,11 @@ export default function PemfThzPage() {
               </div>
 
               <div className="mt-8 flex flex-wrap gap-4 pt-4 border-t border-border/60">
-                <div className="flex items-center gap-2 text-xs font-bold text-foreground">
+                <div className="flex items-center gap-2 text-xs font-medium text-foreground">
                   <ShieldCheck className="size-4 text-brand-dark" />
                   <span>100% Non-Invasive Bio-Resonance</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-foreground">
+                <div className="flex items-center gap-2 text-xs font-medium text-foreground">
                   <Award className="size-4 text-brand-dark" />
                   <span>Clinic Tested & Practitioner Approved</span>
                 </div>
@@ -109,7 +106,10 @@ export default function PemfThzPage() {
 
             {/*here*/}
             <Reveal className="relative order-1 lg:order-2">
-              <span aria-hidden="true" className="absolute -bottom-6 -left-6 size-28 blob bg-brand" />
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-6 -left-6 size-28 blob bg-brand"
+              />
               <img
                 src={pemfThzProducts[0].image}
                 alt={`Portrait of ${pemfThzProducts[0].name}`}
@@ -121,25 +121,24 @@ export default function PemfThzPage() {
             </Reveal>
           </div>
 
-{/* Feature Pillars Grid */}
-            <div className="grid gap-3 sm:gap-5 grid-cols-2 lg:grid-cols-4 mt-16">
-              {pemfThzOverview.pillars.map((pillar, i) => (
-                <Reveal key={pillar.title} delay={i * 80}>
-                  <div className="group h-full rounded-sm border border-border/80 bg-card lg:p-6 p-4 shadow-soft transition-all duration-300 hover:border-brand hover:shadow-lift">
-                    <div className="grid size-11 place-items-center rounded-2xl bg-brand mb-4 transition-all duration-300 group-hover:scale-110">
-                      {iconsMap[pillar.iconName as keyof typeof iconsMap]}
-                    </div>
-                    <h3 className="font-display text-xs sm:text-base font-bold text-foreground">
-                      {pillar.title}
-                    </h3>
-                    <p className="mt-2 text-[0.7rem] leading-relaxed text-muted-foreground">
-                      {pillar.description}
-                    </p>
+          {/* Feature Pillars Grid */}
+          <div className="grid gap-3 sm:gap-5 grid-cols-2 lg:grid-cols-4 mt-16">
+            {pemfThzOverview.pillars.map((pillar, i) => (
+              <Reveal key={pillar.title} delay={i * 80}>
+                <div className="group h-full rounded-lg border border-border/80 bg-card lg:p-6 p-4 shadow-soft transition-all duration-300 hover:border-brand hover:shadow-lift">
+                  <div className="grid size-11 place-items-center rounded-2xl bg-brand mb-4 transition-all duration-300">
+                    {iconsMap[pillar.iconName as keyof typeof iconsMap]}
                   </div>
-                </Reveal>
-              ))}
-            </div>
-
+                  <h3 className="font-display text-xs sm:text-base font-bold text-foreground">
+                    {pillar.title}
+                  </h3>
+                  <p className="mt-2 text-[0.7rem] leading-relaxed text-muted-foreground">
+                    {pillar.description}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </Section>
 
@@ -317,7 +316,9 @@ export default function PemfThzPage() {
                       <p className="text-xs font-bold text-foreground">{rev.author}</p>
                       <p className="text-[0.68rem] text-muted-foreground">{rev.location}</p>
                     </div>
-                    <span className="text-[0.65rem] font-medium text-muted-foreground">{rev.date}</span>
+                    <span className="text-[0.65rem] font-medium text-muted-foreground">
+                      {rev.date}
+                    </span>
                   </div>
                 </div>
               </Reveal>
@@ -343,10 +344,10 @@ export default function PemfThzPage() {
                   value={`item-${index}`}
                   className="rounded-sm border border-border/80 bg-card px-6 py-1 shadow-xs transition-colors data-[state=open]:border-brand"
                 >
-                  <AccordionTrigger className="text-left font-display text-base font-bold text-foreground hover:no-underline cursor-pointer">
+                  <AccordionTrigger className="text-left font-display text-sm sm:text-base font-bold text-foreground hover:no-underline cursor-pointer">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-relaxed text-muted-foreground pt-1 pb-4">
+                  <AccordionContent className="text-xs sm:text-sm leading-relaxed text-muted-foreground pt-1 pb-4">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>

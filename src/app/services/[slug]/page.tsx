@@ -67,7 +67,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <section className="relative overflow-hidden bg-sand pt-10 pb-14 md:pb-20">
+      <section className="relative overflow-hidden bg-sand pt-34 pb-14 md:pb-20">
         <div className="container-page">
           <Breadcrumbs
             items={[{ label: "Services", href: "/services" }, { label: service.name }]}
@@ -76,7 +76,7 @@ export default async function ServiceDetailPage({ params }: Props) {
             <Reveal>
               <p className="eyebrow">Service</p>
               <h1 className="mt-3 text-3xl leading-[1.05] font-semibold md:text-5xl">{service.name}</h1>
-              <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-lg">
+              <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
                 {service.short}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
@@ -99,7 +99,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 loading="lazy"
                 width={1024}
                 height={768}
-                className="relative aspect-video lg:aspect-square w-full rounded-[2.5rem] object-cover shadow-soft"
+                className="relative aspect-video w-full rounded-[2.5rem] object-cover shadow-soft"
               />
             </Reveal>
           </div>

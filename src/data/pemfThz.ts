@@ -5,6 +5,10 @@ export type PemfThzProduct = {
   category: "Terahertz" | "PEMF" | "Dual-Tech";
   badge?: string;
   price: string;
+  /** Price in smallest currency unit, e.g. 150000 = $1,500.00 */
+  priceInCents: number;
+  /** ISO currency code */
+  currency: "usd" | "aud";
   description: string;
   benefits: string[];
   specs: string[];
@@ -97,6 +101,8 @@ export const pemfThzProducts: PemfThzProduct[] = [
     category: "Dual-Tech",
     badge: "Flagship Model",
     price: "$1,500 USD",
+    priceInCents: 150000,
+    currency: "usd",
     description:
       "The OlyLife THz Tera-P90+ is an all-in-one wellness device combining PEMF technology with beauty and massage tools for comprehensive relaxation and rejuvenation.",
     benefits: [
@@ -120,6 +126,8 @@ export const pemfThzProducts: PemfThzProduct[] = [
     category: "Dual-Tech",
     badge: "Best Seller",
     price: "$1,000 USD",
+    priceInCents: 100000,
+    currency: "usd",
     description:
       "The OlyLife THz Tera-P90 boosts cellular health by combining bioelectromagnetic and terahertz energy.",
     benefits: [
@@ -143,6 +151,8 @@ export const pemfThzProducts: PemfThzProduct[] = [
     category: "PEMF",
     badge: "Eye Wellness",
     price: "$500 USD",
+    priceInCents: 50000,
+    currency: "usd",
     description:
       "The GALAXY G-one is a foldable smart eye massager with PEMF technology, offering 7 eye care modes, 4 technologies, and easy one-button control for on-the-go comfort.",
     benefits: [
@@ -166,6 +176,8 @@ export const pemfThzProducts: PemfThzProduct[] = [
     category: "PEMF",
     badge: "Core Health",
     price: "$1,000 USD",
+    priceInCents: 100000,
+    currency: "usd",
     description:
       "The Shaken Massager targets stubborn belly fat using 7-in-1 technology including PEMF, ultrasound, and heat therapy to shape the waist and support core health.",
     benefits: [
@@ -189,6 +201,8 @@ export const pemfThzProducts: PemfThzProduct[] = [
     category: "Terahertz",
     badge: "Hands-Free Design",
     price: "$600 USD",
+    priceInCents: 60000,
+    currency: "usd",
     description:
       "The Vitality Wand uses ultra-long and biological energy waves with adjustable heat and airflow for a hands-free, fatigue-relieving experience.",
     benefits: [
@@ -212,6 +226,8 @@ export const pemfThzProducts: PemfThzProduct[] = [
     category: "Terahertz",
     badge: "Cellular Hydration",
     price: "$600 USD",
+    priceInCents: 60000,
+    currency: "usd",
     description:
       "The H+ Bar is a portable water bottle that produces antioxidant-rich hydrogen water and enhances absorption with MRET low-frequency resonance technology.",
     benefits: [

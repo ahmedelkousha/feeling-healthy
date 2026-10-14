@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle2, ShoppingBag, Truck, MapPin, Sparkles, Send, PhoneCall } from "lucide-react";
+import { CheckCircle2, ShoppingBag, Truck, MapPin, Sparkles, CreditCard, PhoneCall, Loader2, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,7 +43,10 @@ export function PemfThzOrderForm({
   const selectedProduct =
     pemfThzProducts.find((p) => p.id === formData.productId) || pemfThzProducts[0];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const unitPrice = selectedProduct.priceInCents / 100;
+  const total = unitPrice * Number(formData.quantity);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -61,11 +64,38 @@ export function PemfThzOrderForm({
     }
 
     setLoading(true);
-    // Simulate submission delivery
-    setTimeout(() => {
+
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "product",
+          slug: formData.productId,
+          quantity: parseInt(formData.quantity),
+          customerEmail: formData.email,
+          customerName: formData.fullName,
+          metadata: {
+            deliveryMethod: formData.deliveryMethod,
+            phone: formData.phone,
+            address: formData.address,
+            notes: formData.notes,
+            requestConsultation: String(formData.requestConsultation),
+          },
+        }),
+      });
+
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(data.error || "Payment could not be initiated. Please try again.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
       setLoading(false);
-      setSubmitted(true);
-    }, 600);
+    }
   };
 
   const handleReset = () => {
@@ -351,26 +381,28 @@ export function PemfThzOrderForm({
               </div>
 
               {/* Submit Button */}
-              <div className="pt-2 flex items-center justify-between gap-4 flex-wrap">
-                <p className="text-xs text-muted-foreground">
-                  🔒 No payment taken immediately. We will confirm availability & invoice upon phone/email contact.
-                </p>
+              <div className="pt-2 flex flex-col gap-3">
+                <div className="flex items-center justify-between gap-4 flex-wrap">
+                  <p className="text-xs text-muted-foreground">
+                    🔒 You will be securely redirected to Stripe to complete payment.
+                  </p>
 
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  size="lg"
-                  className="w-full sm:w-auto gap-2 font-bold px-8 shadow-soft cursor-pointer"
-                >
-                  {loading ? (
-                    <span>Processing Order...</span>
-                  ) : (
-                    <>
-                      <Send className="size-4" />
-                      <span>Submit Order Request</span>
-                    </>
-                  )}
-                </Button>
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    size="lg"
+                    className="w-full sm:w-auto gap-2 font-bold px-8 shadow-soft cursor-pointer"
+                  >
+                    {loading ? (
+                      <><Loader2 className="size-4 animate-spin" /><span>Processing…</span></>
+                    ) : (
+                      <><CreditCard className="size-4" /><span>Pay Now — ${total.toLocaleString()} {selectedProduct.currency.toUpperCase()}</span></>
+                    )}
+                  </Button>
+                </div>
+                <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <ShieldCheck className="size-3.5" /> Payments are securely processed by Stripe. We never see your card details.
+                </p>
               </div>
             </form>
           </div>

@@ -50,6 +50,10 @@ export type Service = {
   category: CategoryId;
   short: string;
   description: string;
+  /** Price in cents AUD, e.g. 12000 = $120.00 */
+  priceInCents: number;
+  /** Human-readable price, e.g. "$120" */
+  priceDisplay: string;
   image?: string;
   featured?: boolean;
   howItHelps: string[];
@@ -85,12 +89,19 @@ const defaultFaqs = (name: string): Faq[] => [
 type ServiceSeed = Omit<Service, "whatToExpect" | "faqs"> &
   Partial<Pick<Service, "whatToExpect" | "faqs">>;
 
+/** Helper: shorthand for defining a price (dollars → cents). */
+const price = (dollars: number) => ({
+  priceInCents: dollars * 100,
+  priceDisplay: `$${dollars}`,
+});
+
 const seeds: ServiceSeed[] = [
   {
     slug: "massage",
     name: "Massage",
     category: "physical",
     featured: true,
+    ...price(120),
     image: "/images/service-massage.jpg",
     short: "Hands-on therapeutic massage tailored to your body, tension and comfort.",
     description:
@@ -112,6 +123,7 @@ const seeds: ServiceSeed[] = [
     name: "Counselling",
     category: "mind",
     featured: true,
+    ...price(150),
     image: "/images/service-counselling.jpg",
     short: "A calm, confidential space to talk things through at your own pace.",
     description:
@@ -133,6 +145,7 @@ const seeds: ServiceSeed[] = [
     name: "Naturopathy",
     category: "nutrition",
     featured: true,
+    ...price(140),
     image: "/images/service-naturopathy.jpg",
     short: "A whole-person look at diet, lifestyle and natural health support.",
     description:
@@ -154,6 +167,7 @@ const seeds: ServiceSeed[] = [
     name: "Nutrition",
     category: "nutrition",
     featured: true,
+    ...price(130),
     image: "/images/service-nutrition.jpg",
     short: "Practical, personalised food guidance without restrictive rules.",
     description:
@@ -175,6 +189,7 @@ const seeds: ServiceSeed[] = [
     name: "Clinical Hypnosis",
     category: "mind",
     featured: true,
+    ...price(160),
     image: "/images/service-hypnosis.jpg",
     short: "A focused, deeply relaxed state used to work on specific goals.",
     description:
@@ -196,6 +211,7 @@ const seeds: ServiceSeed[] = [
     name: "Diagnostic Testing",
     category: "other",
     featured: true,
+    ...price(200),
     image: "/images/service-testing.jpg",
     short: "Optional testing to add useful detail to your wellbeing plan.",
     description:
@@ -216,6 +232,7 @@ const seeds: ServiceSeed[] = [
     slug: "stress-anxiety",
     name: "Stress & Anxiety",
     category: "mind",
+    ...price(150),
     image: "/images/service-stress.jpg",
     short: "Support for a mind that feels busy, tense or constantly on alert.",
     description:
@@ -236,6 +253,7 @@ const seeds: ServiceSeed[] = [
     slug: "sports-injuries",
     name: "Sports & Injuries",
     category: "physical",
+    ...price(120),
     image: "/images/service-sports-injuries.jpg",
     short: "Hands-on support for training, recovery and everyday niggles.",
     description:
@@ -256,6 +274,7 @@ const seeds: ServiceSeed[] = [
     slug: "fatigue",
     name: "Fatigue",
     category: "physical",
+    ...price(140),
     image: "/images/service-fatigue.jpg",
     short: "A joined-up look at low energy across sleep, food and stress.",
     description:
@@ -276,6 +295,7 @@ const seeds: ServiceSeed[] = [
     slug: "weight-management",
     name: "Weight Management",
     category: "physical",
+    ...price(130),
     image: "/images/service-weight.jpg",
     short: "Supportive, non-judgemental help with habits around food and movement.",
     description:
@@ -296,6 +316,7 @@ const seeds: ServiceSeed[] = [
     slug: "dietary-advice",
     name: "Dietary Advice",
     category: "nutrition",
+    ...price(120),
     image: "/images/service-dietery-advice.jpg",
     short: "Straightforward guidance on eating well for your circumstances.",
     description:
@@ -316,6 +337,7 @@ const seeds: ServiceSeed[] = [
     slug: "digestive-problems",
     name: "Digestive Problems",
     category: "nutrition",
+    ...price(140),
     image: "/images/service-digestive-problems.jpg",
     short: "Support for ongoing digestive discomfort and food-related concerns.",
     description:
@@ -336,6 +358,7 @@ const seeds: ServiceSeed[] = [
     slug: "womens-health",
     name: "Women's Health",
     category: "womens",
+    ...price(150),
     image: "/images/service-woman-health.jpg",
     short: "Personalised support across cycles, hormones and life stages.",
     description:
@@ -356,6 +379,7 @@ const seeds: ServiceSeed[] = [
     slug: "fertility-pregnancy",
     name: "Fertility & Pregnancy",
     category: "womens",
+    ...price(160),
     image: "/images/service-pregnancy.jpg",
     short: "Gentle, supportive care while trying to conceive and through pregnancy.",
     description:
@@ -376,6 +400,7 @@ const seeds: ServiceSeed[] = [
     slug: "hypnobirthing",
     name: "Hypnobirthing",
     category: "womens",
+    ...price(180),
     image: "/images/service-hypnobirthing.jpg",
     short: "Relaxation, breathing and preparation for a calmer birth experience.",
     description:
@@ -396,6 +421,7 @@ const seeds: ServiceSeed[] = [
     slug: "thought-field-therapy",
     name: "Thought Field Therapy",
     category: "other",
+    ...price(140),
     image: "/images/service-thought-field-therapy.jpg",
     short: "A gentle tapping-based technique used for emotional responses.",
     description:
@@ -416,6 +442,7 @@ const seeds: ServiceSeed[] = [
     slug: "childrens-health",
     name: "Children's Health",
     category: "other",
+    ...price(120),
     image: "/images/service-children-health.jpg",
     short: "Family-friendly support for children's wellbeing, food and routines.",
     description:

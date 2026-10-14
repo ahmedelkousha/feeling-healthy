@@ -38,7 +38,7 @@ export function SubscriptionSection() {
             <h2 className="mt-3 text-3xl leading-[1.08] font-semibold md:text-4xl lg:text-5xl">
               Subscribe to Our Newsletter
             </h2>
-            <p className="mt-4 text-base text-brand-foreground/85 md:text-lg max-w-xl">
+            <p className="mt-4 text-sm text-brand-foreground/85 md:text-base max-w-xl">
               Receive practical holistic health guidance, naturopathic insights, and clinic updates directly in your inbox.
             </p>
           </Reveal>

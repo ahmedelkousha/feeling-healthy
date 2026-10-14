@@ -27,7 +27,6 @@ export function ServicesSlider() {
             title="Explore Our Services"
             description="A range of holistic services under one roof, so your care can join up around you."
           />
-          
         </div>
 
         <Reveal className="mt-10">
@@ -39,12 +38,11 @@ export function ServicesSlider() {
             autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true }}
             pagination={{ clickable: true, el: ".swiper-pagination-services" }}
             loop={true}
-            spaceBetween={24}
             breakpoints={{
-              320: { slidesPerView: 1 },
-              640: { slidesPerView: 1.5 },
-              768: { slidesPerView: 2.2 },
-              1024: { slidesPerView: 3 },
+              320: { slidesPerView: 1.2, spaceBetween: 10 },
+              640: { slidesPerView: 1.5, spaceBetween: 10 },
+              768: { slidesPerView: 2.3, spaceBetween: 12 },
+              1024: { slidesPerView: 3.3, spaceBetween: 14 },
             }}
             className="!pb-14 cursor-grab active:cursor-grabbing"
           >
@@ -53,35 +51,36 @@ export function ServicesSlider() {
                 <ServiceCard service={service} />
               </SwiperSlide>
             ))}
-            
           </Swiper>
           <div>
-<div className="flex items-center justify-end gap-3">
-            <button
-              onClick={() => swiperRef.current?.slidePrev()}
-              aria-label="Previous service"
-              className="grid size-11 place-items-center rounded-full border border-ink/20 bg-background text-foreground transition-all duration-300 hover:bg-brand hover:text-brand-foreground hover:border-brand cursor-pointer shadow-sm"
-            >
-              <ChevronLeft className="size-5" />
-            </button>
-            <button
-              onClick={() => swiperRef.current?.slideNext()}
-              aria-label="Next service"
-              className="grid size-11 place-items-center rounded-full border border-ink/20 bg-background text-foreground transition-all duration-300 hover:bg-brand hover:text-brand-foreground hover:border-brand cursor-pointer shadow-sm"
-            >
-              <ChevronRight className="size-5" />
-            </button>
-          </div>
-          <div className="swiper-pagination-services mt-4 flex justify-center gap-2 [&_.swiper-pagination-bullet]:size-2.5 [&_.swiper-pagination-bullet]:bg-ink/20 [&_.swiper-pagination-bullet-active]:!bg-brand [&_.swiper-pagination-bullet-active]:w-8 [&_.swiper-pagination-bullet]:transition-all [&_.swiper-pagination-bullet]:duration-300" />
-          </div>
-        </Reveal>
+            <div className="flex items-center justify-between gap-3">
+              <Reveal>
+                <Button asChild variant="ink" size="default">
+                  <Link href="/services">
+                    View All Services <ArrowRight />
+                  </Link>
+                </Button>
+              </Reveal>
+              <div className="flex items-center justify-end gap-3">
+                <button
+                  onClick={() => swiperRef.current?.slidePrev()}
+                  aria-label="Previous service"
+                  className="grid size-11 place-items-center rounded-full border border-ink/20 bg-background text-foreground transition-all duration-300 hover:bg-brand hover:text-brand-foreground hover:border-brand cursor-pointer shadow-sm"
+                >
+                  <ChevronLeft className="size-5" />
+                </button>
+                <button
+                  onClick={() => swiperRef.current?.slideNext()}
+                  aria-label="Next service"
+                  className="grid size-11 place-items-center rounded-full border border-ink/20 bg-background text-foreground transition-all duration-300 hover:bg-brand hover:text-brand-foreground hover:border-brand cursor-pointer shadow-sm"
+                >
+                  <ChevronRight className="size-5" />
+                </button>
+              </div>
+            </div>
 
-        <Reveal className="mt-10">
-          <Button asChild variant="ink" size="default">
-            <Link href="/services">
-              View All Services <ArrowRight />
-            </Link>
-          </Button>
+            <div className="swiper-pagination-services mt-4 flex justify-center gap-2 [&_.swiper-pagination-bullet]:size-2.5 [&_.swiper-pagination-bullet]:bg-ink/20 [&_.swiper-pagination-bullet-active]:!bg-brand [&_.swiper-pagination-bullet-active]:w-8 [&_.swiper-pagination-bullet]:transition-all [&_.swiper-pagination-bullet]:duration-300" />
+          </div>
         </Reveal>
       </div>
     </Section>

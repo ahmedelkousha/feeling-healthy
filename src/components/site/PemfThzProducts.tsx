@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ShoppingBag, Sparkles, Info, ArrowDown } from "lucide-react";
+import { Check, ShoppingBag, Info, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { pemfThzProducts, type PemfThzProduct } from "@/data/pemfThz";
 import { cn } from "@/lib/utils";
@@ -55,18 +55,9 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="group flex flex-col justify-between overflow-hidden rounded-lg border-2 border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:shadow-lift hover:border-brand/50"
+            className="relative flex flex-col justify-between overflow-hidden rounded-lg border-2 border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:shadow-lift hover:border-brand/50"
           >
-            <div>
-              {/* Product Image & Badges */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-sand/40">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute top-1 left-3 flex flex-wrap gap-1.5 z-10">
+            <div className="absolute top-5 left-5  flex flex-wrap gap-1.5 z-10">
                   {product.badge && (
                     <span className="rounded-full bg-brand px-3 py-1 text-[0.7rem] font-bold text-brand-foreground shadow-sm">
                       {product.badge}
@@ -76,15 +67,25 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
                     {product.category}
                   </span>
                 </div>
+            <div>
+              {/* Product Image & Badges */}
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="size-full object-cover transition-transform duration-500"
+                  loading="lazy"
+                />
+                
               </div>
 
               {/* Title & Price */}
-              <div className="mt-5 flex items-start justify-between gap-2">
+              <div className="mt-5 flex items-center justify-between gap-2">
                 <div>
-                  <h3 className="font-display text-lg font-bold leading-snug text-foreground">
+                  <h3 className="font-display text-base md:text-lg font-bold leading-snug text-foreground">
                     {product.name}
                   </h3>
-                  <p className="text-xs text-muted-foreground font-medium mt-0.5">{product.tagline}</p>
+                  {/* <p className="text-xs text-muted-foreground font-medium mt-0.5">{product.tagline}</p> */}
                 </div>
                 <span className="shrink-0 rounded-lg bg-sand px-3 py-1 text-sm font-extrabold text-brand-dark">
                   {product.price}
@@ -115,7 +116,7 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
             <div className="mt-6 pt-4 border-t border-border/60 flex flex-col gap-2">
               <Button
                 onClick={() => handleOrderClick(product.id)}
-                className="w-full gap-2 font-semibold shadow-sm cursor-pointer"
+                className="w-full gap-2 font-semibold shadow-sm"
                 size="default"
               >
                 <ShoppingBag className="size-4" />

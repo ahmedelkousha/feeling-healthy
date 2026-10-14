@@ -1,18 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { services } from "@/data/services";
 import { practitioners, practitionersForService } from "@/data/practitioners";
-import { site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
-const steps = ["Service", "Practitioner", "Date & Time", "Your Details", "Confirmation"] as const;
+const steps = ["Service", "Practitioner", "Date & Time", "Your Details", "Review & Pay"] as const;
 
 const mockAvailability = ["09:00", "10:30", "12:00", "14:00", "15:30", "17:00"];
 
@@ -30,10 +28,12 @@ export function BookingFlow() {
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
   const [details, setDetails] = useState({ name: "", email: "", phone: "", notes: "" });
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
 
   const days = useMemo(() => nextDays(8), []);
   const service = services.find((s) => s.slug === serviceSlug);
-  const eligible = serviceSlug ? practitionersForService(serviceSlug) : practitioners;
+  const eligible = serviceSlug && serviceSlug !== "other" ? practitionersForService(serviceSlug) : practitioners;
   const practitioner = practitioners.find((p) => p.slug === practitionerSlug);
 
   const canContinue = [
@@ -81,8 +81,17 @@ export function BookingFlow() {
                   }}
                   title={s.name}
                   subtitle={s.short}
-                />
+                /> 
               ))}
+              <Choice
+                selected={serviceSlug === "other"}
+                onClick={() => {
+                  setServiceSlug("other");
+                  setPractitionerSlug(null);
+                }}
+                title="Other Service / Consultation"
+                subtitle="General inquiry, wellness consultation, or non-listed service."
+              />
             </div>
           </Step>
         ) : null}
@@ -199,14 +208,21 @@ export function BookingFlow() {
 
         {step === 4 ? (
           <div>
-            <p className="script-accent text-2xl">Almost there</p>
-            <h2 className="mt-3 text-2xl font-semibold">Your appointment request is ready</h2>
+            <p className="script-accent text-2xl">Review & pay</p>
+            <h2 className="mt-3 text-2xl font-semibold">Confirm your booking</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Online booking is not yet connected, so <strong>no appointment has been reserved</strong>.
-              Please call {site.contact.phone} or send us a message to confirm these details.
+              Please review your details below. Once you click <strong>Pay&nbsp;&amp;&nbsp;Confirm</strong> you
+              will be securely redirected to Stripe to complete payment.
             </p>
+
             <dl className="mt-6 grid gap-3 rounded-2xl bg-sand p-5 text-sm">
-              <Summary label="Service" value={service?.name ?? "—"} />
+              <Summary
+                label="Service"
+                value={serviceSlug === "other" ? "Other Service / Consultation" : (service?.name ?? "—")}
+              />
+              {service && (
+                <Summary label="Price" value={service.priceDisplay + " AUD"} />
+              )}
               <Summary
                 label="Practitioner"
                 value={practitionerSlug === "any" ? "No preference" : (practitioner?.name ?? "—")}
@@ -216,24 +232,88 @@ export function BookingFlow() {
               <Summary label="Name" value={details.name || "—"} />
               <Summary label="Email" value={details.email || "—"} />
             </dl>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <Link href="/contact">Send These Details</Link>
+
+            {checkoutError && (
+              <div className="mt-4 rounded-xl bg-destructive/10 border border-destructive/20 p-4 text-sm text-destructive">
+                {checkoutError}
+              </div>
+            )}
+
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Button
+                size="lg"
+                disabled={checkoutLoading || serviceSlug === "other"}
+                onClick={async () => {
+                  setCheckoutLoading(true);
+                  setCheckoutError("");
+                  try {
+                    const res = await fetch("/api/checkout", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        type: "service",
+                        slug: serviceSlug,
+                        quantity: 1,
+                        customerEmail: details.email,
+                        customerName: details.name,
+                        metadata: {
+                          practitioner: practitionerSlug,
+                          date,
+                          time,
+                          phone: details.phone,
+                          notes: details.notes,
+                        },
+                      }),
+                    });
+                    const data = await res.json();
+                    if (data.url) {
+                      window.location.href = data.url;
+                    } else {
+                      setCheckoutError(data.error || "Something went wrong. Please try again.");
+                      setCheckoutLoading(false);
+                    }
+                  } catch {
+                    setCheckoutError("Network error. Please check your connection and try again.");
+                    setCheckoutLoading(false);
+                  }
+                }}
+              >
+                {checkoutLoading ? (
+                  <><Loader2 className="size-4 animate-spin" /> Processing…</>
+                ) : (
+                  <><CreditCard className="size-4" /> Pay &amp; Confirm</>
+                )}
               </Button>
               <Button
                 variant="outline"
                 size="lg"
+                disabled={checkoutLoading}
                 onClick={() => {
                   setStep(0);
                   setServiceSlug(null);
                   setPractitionerSlug(null);
                   setDate(null);
                   setTime(null);
+                  setCheckoutError("");
                 }}
               >
                 Start Again
               </Button>
             </div>
+
+            {serviceSlug === "other" && (
+              <p className="mt-4 text-sm text-muted-foreground">
+                Online payment is not available for general consultations. Please{" "}
+                <a href="/contact" className="underline underline-offset-2 hover:text-foreground">
+                  contact us
+                </a>{" "}
+                to arrange your appointment.
+              </p>
+            )}
+
+            <p className="mt-4 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <ShieldCheck className="size-3.5" /> Payments are securely processed by Stripe. We never see your card details.
+            </p>
           </div>
         ) : null}
 

@@ -29,7 +29,7 @@ export function ServiceCard({ service, className }: { service: Service; classNam
           />
         </Link>
 
-        <Link href={`/services/${service.slug}`} className="flex flex-1 flex-col p-6">
+        <Link href={`/services/${service.slug}`} className="flex flex-1 flex-col p-4 sm:p-6">
           <h3 className="text-xl font-semibold">{service.name}</h3>
           <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{service.short}</p>
           <div className="mt-5 flex items-center justify-between">

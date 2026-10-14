@@ -102,7 +102,7 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth !important;
     -webkit-text-size-adjust: 100%;
     scrollbar-width: thin;
     scrollbar-color: var(--brand) transparent;
@@ -215,4 +215,8 @@
     opacity: 1;
     transform: none;
   }
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  cursor:default;
 }
