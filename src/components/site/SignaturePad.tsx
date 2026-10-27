@@ -45,9 +45,9 @@ export function SignaturePad({ onSignatureChange, defaultName = "" }: SignatureP
   };
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-      <div className="mb-3 flex items-center justify-between">
-        <label className="text-sm font-semibold text-foreground">
+    <div className="rounded-lg border border-border bg-card py-4 px-2.5 shadow-sm">
+      <div className="mb-3 flex items-center justify-between sm:flex-row flex-col gap-y-3">
+        <label className="text-xs sm:text-sm font-semibold text-foreground">
           Digital Signature <span className="text-destructive">*</span>
         </label>
         <div className="flex items-center gap-1 rounded-lg bg-muted p-1 text-xs">
@@ -63,7 +63,7 @@ export function SignaturePad({ onSignatureChange, defaultName = "" }: SignatureP
                   onSignatureChange("", "type", typedName);
                 }
               }}
-              className={`flex items-center gap-1 rounded-md px-2.5 py-1 font-medium transition-all ${
+              className={`flex items-center gap-1 rounded-lg px-2.5 py-1 font-medium transition-all ${
                 mode === key
                   ? "bg-white text-foreground shadow-xs dark:bg-zinc-800"
                   : "text-muted-foreground hover:text-foreground"
@@ -87,7 +87,7 @@ export function SignaturePad({ onSignatureChange, defaultName = "" }: SignatureP
             onEnd={emitDrawState}
             canvasProps={{
               className:
-                "h-32 w-full touch-none rounded-lg border border-dashed border-input bg-white cursor-crosshair dark:bg-zinc-950",
+                "h-40 w-full touch-none rounded-lg border border-dashed border-input bg-white cursor-crosshair dark:bg-zinc-950",
             }}
           />
           <div className="pointer-events-none absolute bottom-3 left-4 text-xs text-muted-foreground">

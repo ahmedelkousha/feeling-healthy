@@ -51,8 +51,10 @@
   --color-cream: var(--cream);
   --color-sand: var(--sand);
 
-  --shadow-soft: 0 1px 2px oklch(0.21 0.004 90 / 0.04), 0 12px 30px -18px oklch(0.21 0.004 90 / 0.18);
-  --shadow-lift: 0 2px 4px oklch(0.21 0.004 90 / 0.05), 0 28px 60px -28px oklch(0.21 0.004 90 / 0.28);
+  --shadow-soft:
+    0 1px 2px oklch(0.21 0.004 90 / 0.04), 0 12px 30px -18px oklch(0.21 0.004 90 / 0.18);
+  --shadow-lift:
+    0 2px 4px oklch(0.21 0.004 90 / 0.05), 0 28px 60px -28px oklch(0.21 0.004 90 / 0.28);
 
   --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -108,6 +110,14 @@
     scrollbar-color: var(--brand) transparent;
   }
 
+  #scrollable-dropdown,
+  #scrollable-schedule {
+    scroll-behavior: smooth !important;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--brand) transparent;
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -134,8 +144,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-
-
   h1,
   h2,
   h3,
@@ -156,7 +164,7 @@
   width: 100%;
   margin-inline: auto;
   max-width: 84rem;
-  padding-inline: 1.25rem;
+  padding-inline: 0.9rem;
   @media (min-width: 768px) {
     padding-inline: 2rem;
   }
@@ -217,6 +225,18 @@
   }
 }
 
-h1, h2, h3, h4, h5, h6, p {
-  cursor:default;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  cursor: default;
+}
+a p {
+  cursor: pointer;
+}
+button{
+  cursor: pointer;
 }

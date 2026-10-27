@@ -104,7 +104,12 @@ export function ServiceQuickViewModal({ service, isOpen, onClose }: ServiceQuick
                 </Link>
               </Button>
 
-              <Button variant="default" size="sm" onClick={onClose} className="text-xs text-muted-foreground">
+              <Button
+                variant="default"
+                size="sm"
+                onClick={onClose}
+                className="text-xs text-muted-foreground"
+              >
                 Close
               </Button>
             </div>
@@ -112,6 +117,6 @@ export function ServiceQuickViewModal({ service, isOpen, onClose }: ServiceQuick
         </div>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 }

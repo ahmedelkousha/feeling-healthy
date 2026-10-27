@@ -67,7 +67,7 @@ export default function PemfThzPage() {
               <span>Explore Products</span>
             </a>
           </Button>
-          <Button asChild variant="outline" size="default" className="gap-2 w-full sm:w-auto">
+          <Button asChild variant="onDark" size="default" className="gap-2 w-full sm:w-auto border-0 text-ink-foreground/70">
             <a href="#order-form">
               <span>Order Form</span>
             </a>
@@ -104,7 +104,6 @@ export default function PemfThzPage() {
               </div>
             </div>
 
-            {/*here*/}
             <Reveal className="relative order-1 lg:order-2">
               <span
                 aria-hidden="true"
@@ -125,14 +124,14 @@ export default function PemfThzPage() {
           <div className="grid gap-3 sm:gap-5 grid-cols-2 lg:grid-cols-4 mt-16">
             {pemfThzOverview.pillars.map((pillar, i) => (
               <Reveal key={pillar.title} delay={i * 80}>
-                <div className="group h-full rounded-lg border border-border/80 bg-card lg:p-6 p-4 shadow-soft transition-all duration-300 hover:border-brand hover:shadow-lift">
+                <div className="group h-full rounded-lg border border-border/80 bg-ink lg:p-6 p-4 shadow-soft transition-all duration-300 hover:border-brand hover:shadow-lift">
                   <div className="grid size-11 place-items-center rounded-2xl bg-brand mb-4 transition-all duration-300">
                     {iconsMap[pillar.iconName as keyof typeof iconsMap]}
                   </div>
-                  <h3 className="font-display text-xs sm:text-base font-bold text-foreground">
+                  <h3 className="font-display text-xs sm:text-base font-bold text-brand">
                     {pillar.title}
                   </h3>
-                  <p className="mt-2 text-[0.7rem] leading-relaxed text-muted-foreground">
+                  <p className="mt-2 text-[0.75rem] leading-relaxed text-ink-foreground">
                     {pillar.description}
                   </p>
                 </div>

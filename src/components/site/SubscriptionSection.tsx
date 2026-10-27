@@ -1,20 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Send } from "lucide-react";
+import { CheckCircle2, Send, Loader2, LockOpen, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Reveal } from "./Reveal";
+import { addSubscriber } from "@/lib/firebase/services";
+import { toast } from "sonner";
 
 export function SubscriptionSection() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim() && email.trim()) {
+
+    if (!email.trim() || !email.includes("@")) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await addSubscriber({
+        name: name.trim() || "Community Member",
+        email: email.trim(),
+      });
       setSubmitted(true);
+      toast.success("Thank you for subscribing!", {
+        description: "You're now subscribed to our health & wellness updates.",
+      });
+    } catch (err: any) {
+      console.error("Subscription error:", err);
+      toast.error(err.message || "Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -46,26 +68,36 @@ export function SubscriptionSection() {
           {/* Right Column: Subscription Form / Success State */}
           <Reveal className="justify-items-center" delay={100}>
             {submitted ? (
-              <div className="rounded-2xl bg-card backdrop-blur-sm p-6 sm:p-8 text-left animate-in fade-in duration-300 border border-ink/15">
+              <div className="rounded-2xl bg-card backdrop-blur-sm p-6 sm:p-8 text-left animate-in fade-in duration-300 border border-ink/15 shadow-xl">
                 <div className="grid size-12 place-items-center rounded-full bg-brand text-brand-foreground mb-4 shadow-sm">
                   <CheckCircle2 className="size-7" />
                 </div>
-                <h4 className="font-display text-xl font-bold text-brand-foreground">
-                  Thank You, {name}!
+                <h4 className="font-display text-xl font-bold text-foreground">
+                  Thank You, {name || "there"}!
                 </h4>
-                <p className="mt-2 text-sm text-brand-foreground/90 leading-relaxed">
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                   You have been successfully subscribed to the Feeling Healthy wellness newsletter. Check your inbox soon for health tips!
                 </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSubmitted(false);
+                    setName("");
+                    setEmail("");
+                  }}
+                  className="mt-4 text-xs font-semibold text-ink/85 hover:underline cursor-pointer inline-flex items-center gap-1"
+                >
+                  Subscribe another email <ArrowRight className="size-3"/>
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 sm:max-w-sm">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 sm:max-w-sm w-full">
                 <div className="grid grid-cols-1 gap-3">
                   <Input
                     type="text"
                     placeholder="Your Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    required
                     className="h-12 rounded-sm bg-white/95 border-brand-foreground/20 text-foreground placeholder:text-muted-foreground text-sm px-5 focus-visible:ring-2 focus-visible:ring-ink shadow-soft"
                   />
                   <Input
@@ -79,12 +111,27 @@ export function SubscriptionSection() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                  <Button type="submit" variant="ink" size="default" className="px-4 font-bold gap-2 cursor-pointer w-full sm:w-auto shadow-soft">
-                    <Send className="size-4" />
-                    <span className="font-medium">Subscribe Now</span>
+                  <Button
+                    type="submit"
+                    variant="ink"
+                    size="default"
+                    disabled={isSubmitting}
+                    className="px-4 font-bold gap-2 cursor-pointer w-full sm:w-auto shadow-soft"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" />
+                        <span>Subscribing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="size-4" />
+                        <span className="font-medium">Subscribe Now</span>
+                      </>
+                    )}
                   </Button>
-                  <p className="text-[11px] text-brand-foreground/70 sm:ml-auto">
-                    🔒 Unsubscribe at any time with 1-click.
+                  <p className="text-[11px] text-brand-foreground/70 sm:ml-auto inline-flex gap-1 justify-center items-center">
+                    <LockOpen className="size-3" /> Unsubscribe at any time with 1-click.
                   </p>
                 </div>
               </form>

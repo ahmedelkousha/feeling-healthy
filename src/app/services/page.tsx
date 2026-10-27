@@ -47,7 +47,11 @@ export default function ServicesPage() {
       {serviceCategories.map((category, index) => (
         <Section key={category.id} tone={index % 2 === 0 ? "cream" : "white"} id={category.id}>
           <div className="container-page">
-            <SectionHeading eyebrow={`0${index + 1}`} title={category.title} description={category.blurb} />
+            <SectionHeading
+              eyebrow={`0${index + 1}`}
+              title={category.title}
+              description={category.blurb}
+            />
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {servicesByCategory(category.id).map((service, i) => (
                 <Reveal key={service.slug} delay={i * 70}>

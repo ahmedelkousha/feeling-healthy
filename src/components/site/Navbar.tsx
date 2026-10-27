@@ -109,11 +109,11 @@ export function Navbar() {
 
   const isServicesActive = pathname.startsWith("/services");
   return (
-    <div className="container-page bg-transparent fixed top-0 left-0 right-0 z-60 py-6">
+    <div className={`${pathname?.startsWith('/admin') ? 'hidden' : 'block'} container-page bg-transparent fixed top-0 left-0 right-0 z-60 py-6`}>
       {/* Brand Top Bar (Static - scrolls away naturally with page) */}
       <div>
         <div
-          className={`bg-brand rounded-t-lg border-0 text-brand-foreground text-xs font-medium overflow-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${pathname === "/" ? "block" : "hidden"} ${scrolled ? "py-1.5 transition-all duration-500" : "py-2 transition-all duration-500"}`}
+          className={`bg-brand rounded-t-md border-0 text-brand-foreground text-xs font-medium overflow-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${pathname === "/" ? "block" : "hidden"} ${scrolled ? "py-1.5 transition-all duration-500" : "py-2 transition-all duration-500"}`}
         >
           <div className="container-page flex flex-nowrap items-center justify-between gap-x-3 gap-y-1">
             <div className="flex flex-nowrap items-center gap-x-6 gap-y-1">
@@ -155,11 +155,17 @@ export function Navbar() {
         <header
           className={cn(
             "top-0 sticky flex flex-col justify-center items-center z-60 transition-all duration-300 ease-[var(--ease-calm)]",
-            scrolled ? "bg-background shadow-sm" : "bg-background", pathname === "/" ? "rounded-b-lg" : "rounded-lg"
+            scrolled ? "bg-background shadow-sm" : "bg-background",
+            pathname === "/" ? "rounded-b-md" : "rounded-md",
           )}
         >
           {/* Main Navbar */}
-          <div className={cn("container-page grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-1 z-55 lg:z-5 bg-background", pathname === "/" ? "rounded-b-lg" : "rounded-lg")}>
+          <div
+            className={cn(
+              "container-page grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-1 z-55 xl:z-5 bg-background",
+              pathname === "/" ? "rounded-b-lg" : "rounded-lg",
+            )}
+          >
             <Link
               href="/"
               onClick={(e) => handleLinkClick(e, "/", closeAllMenus)}
@@ -174,7 +180,7 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
+            <nav className="hidden items-center gap-1 xl:flex" aria-label="Main">
               {primaryNav.map((item) => {
                 const isServices = item.to === "/services";
                 const isOurStory = item.label === "About Us";
@@ -298,7 +304,7 @@ export function Navbar() {
             </nav>
 
             {/* Mobile Menu Button */}
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className="flex items-center gap-2 xl:hidden">
               <Button asChild size="sm" className="hidden sm:inline-flex">
                 <Link href={bookCta.to}>{bookCta.label}</Link>
               </Button>
@@ -338,11 +344,11 @@ export function Navbar() {
             <div
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              className="absolute top-[86px] left-0 right-0 w-full bg-background shadow-lift z-50 animate-in fade-in slide-in-from-top-2 duration-250 hidden lg:block rounded-xl"
+              className="absolute top-[86px] left-0 right-0 w-full bg-background shadow-lift z-50 animate-in fade-in slide-in-from-top-2 duration-250 hidden xl:block rounded-xl"
             >
-              <div className="container-page py-10 grid grid-cols-[1fr_22rem] gap-12 items-start">
+              <div className="container-page py-10 grid grid-cols-[1fr_18rem] gap-4 items-start">
                 {/* Left: 3-column Organized Service Categories */}
-                <div className="grid grid-cols-3 gap-x-8 gap-y-7">
+                <div className="grid grid-cols-3 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-7">
                   {serviceCategories.map((cat) => {
                     const catServices = services.filter((s) => s.category === cat.id);
                     return (
@@ -407,21 +413,21 @@ export function Navbar() {
           {/* Mobile Slide Menu (Modern, Unique & Organized Drawer) */}
           <div
             className={cn(
-              "fixed inset-0 z-50 flex flex-col bg-background backdrop-blur-2xl lg:hidden transition-all duration-500 ease-[var(--ease-calm)] pt-22 sm:pt-30",
+              "fixed inset-0 z-50 flex flex-col bg-background backdrop-blur-2xl xl:hidden transition-all duration-500 ease-[var(--ease-calm)] pt-22 sm:pt-30",
               open ? "translate-x-0" : "translate-x-full pointer-events-none",
             )}
           >
             {/* Scrollable Content Body */}
-            <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
+            <div className="flex-1 overflow-y-auto px-5 py-8 space-y-6">
               {/* Navigation Accordions List using Radix UI Accordion */}
               <nav className="space-y-3" aria-label="Mobile Navigation">
                 <Accordion collapsible type="single" className="w-full space-y-3">
                   {/* Services Accordion Card */}
                   <AccordionItem
                     value="services"
-                    className="rounded-sm border border-border/80 bg-card overflow-hidden"
+                    className="rounded-sm border border-border/80 overflow-hidden"
                   >
-                    <AccordionTrigger className="p-4 font-display text-xl font-semibold text-foreground hover:no-underline py-4">
+                    <AccordionTrigger className="p-4 font-display bg-brand text-xl font-semibold text-foreground hover:no-underline py-4">
                       <span>Services</span>
                     </AccordionTrigger>
 
@@ -478,7 +484,7 @@ export function Navbar() {
                     value="about"
                     className="rounded-sm border border-border/80 bg-card overflow-hidden"
                   >
-                    <AccordionTrigger className="p-4 font-display text-xl font-semibold text-foreground hover:no-underline py-4">
+                    <AccordionTrigger className="p-4 font-display bg-brand text-xl font-semibold text-foreground hover:no-underline py-4">
                       <span>About Us</span>
                     </AccordionTrigger>
 

@@ -27,7 +27,6 @@ export default function MetabolicAssessmentPage() {
       <PageHero
         eyebrow="Health Assessment"
         title="Metabolic Health Assessment"
-        script="Could your symptoms be connected?"
         description="Tick your symptoms to uncover hidden connections across digestion, sleep, mood, energy, inflammation, and hormones."
         crumbs={[{ label: "Forms", href: "/forms" }, { label: "Metabolic Assessment" }]}
       />

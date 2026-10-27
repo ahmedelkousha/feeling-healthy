@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { PageHero } from "@/components/site/PageHero";
 import { Section } from "@/components/site/Section";
@@ -27,11 +28,13 @@ export default function BookPage() {
       <PageHero
         eyebrow="Booking"
         title="Book an Appointment"
-        description="Online booking isn't connected yet, so this flow prepares your appointment request rather than reserving a time."
+        description="Choose your preferred service, session option, practitioner, and time to book your visit."
         crumbs={[{ label: "Book" }]}
       />
       <Section>
-        <BookingFlow />
+        <Suspense fallback={<div className="container-page py-12 text-center text-muted-foreground">Loading booking options…</div>}>
+          <BookingFlow />
+        </Suspense>
       </Section>
     </>
   );

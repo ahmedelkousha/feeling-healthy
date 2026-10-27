@@ -79,7 +79,7 @@ export function ServicesSlider() {
               </div>
             </div>
 
-            <div className="swiper-pagination-services mt-4 flex justify-center gap-2 [&_.swiper-pagination-bullet]:size-2.5 [&_.swiper-pagination-bullet]:bg-ink/20 [&_.swiper-pagination-bullet-active]:!bg-brand [&_.swiper-pagination-bullet-active]:w-8 [&_.swiper-pagination-bullet]:transition-all [&_.swiper-pagination-bullet]:duration-300" />
+            <div className="swiper-pagination-services pt-12 flex justify-center gap-2 [&_.swiper-pagination-bullet]:size-2.5 [&_.swiper-pagination-bullet]:bg-ink/20 [&_.swiper-pagination-bullet-active]:!bg-brand [&_.swiper-pagination-bullet-active]:w-8 [&_.swiper-pagination-bullet]:transition-all [&_.swiper-pagination-bullet]:duration-300" />
           </div>
         </Reveal>
       </div>

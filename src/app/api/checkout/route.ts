@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { services } from "@/data/services";
 import { pemfThzProducts } from "@/data/pemfThz";
+import { getProducts } from "@/lib/firebase/services";
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,22 +28,18 @@ export async function POST(req: NextRequest) {
     if (type === "service") {
       const service = services.find((s) => s.slug === slug);
       if (!service) {
-        return NextResponse.json(
-          { error: `Service "${slug}" not found.` },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: `Service "${slug}" not found.` }, { status: 400 });
       }
-      itemName = service.name;
-      unitAmount = service.priceInCents;
+      const option = service.options?.find((o) => o.id === body.optionId);
+      itemName = option ? `${service.name} (${option.name})` : service.name;
+      unitAmount = option ? option.priceInCents : service.priceInCents;
       currency = "aud";
-      description = `Feeling Healthy — ${service.name} appointment`;
+      description = option?.note || `Feeling Healthy — ${itemName} appointment`;
     } else if (type === "product") {
-      const product = pemfThzProducts.find((p) => p.id === slug);
+      const allProducts = await getProducts();
+      const product = allProducts.find((p) => p.id === slug) || pemfThzProducts.find((p) => p.id === slug);
       if (!product) {
-        return NextResponse.json(
-          { error: `Product "${slug}" not found.` },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: `Product "${slug}" not found.` }, { status: 400 });
       }
       itemName = product.name;
       unitAmount = product.priceInCents;
@@ -51,7 +48,7 @@ export async function POST(req: NextRequest) {
     } else {
       return NextResponse.json(
         { error: "Invalid type. Must be 'service' or 'product'." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -84,14 +81,13 @@ export async function POST(req: NextRequest) {
       },
       {
         idempotencyKey: slug,
-      }
+      },
     );
 
     return NextResponse.json({ url: session.url });
   } catch (err: unknown) {
     console.error("Stripe checkout error:", err);
-    const message =
-      err instanceof Error ? err.message : "Unknown error creating checkout session.";
+    const message = err instanceof Error ? err.message : "Unknown error creating checkout session.";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

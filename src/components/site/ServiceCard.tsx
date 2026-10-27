@@ -18,7 +18,10 @@ export function ServiceCard({ service, className }: { service: Service; classNam
           className,
         )}
       >
-        <Link href={`/services/${service.slug}`} className="block relative aspect-[16/9] w-full overflow-hidden">
+        <Link
+          href={`/services/${service.slug}`}
+          className="block relative aspect-[16/9] w-full overflow-hidden"
+        >
           <img
             src={service.image || "/images/approach-studio.jpg"}
             alt={`${service.name} at Feeling Healthy`}
@@ -31,7 +34,9 @@ export function ServiceCard({ service, className }: { service: Service; classNam
 
         <Link href={`/services/${service.slug}`} className="flex flex-1 flex-col p-4 sm:p-6">
           <h3 className="text-xl font-semibold">{service.name}</h3>
-          <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{service.short}</p>
+          <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+            {service.short}
+          </p>
           <div className="mt-5 flex items-center justify-between">
             <span className="inline-flex items-center gap-2 text-sm font-medium">
               Learn More

@@ -67,7 +67,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <section className="relative overflow-hidden bg-sand pt-34 pb-14 md:pb-20">
+      <section className="relative overflow-hidden bg-ink pt-34 pb-14 md:pb-20 rounded-b-4xl">
         <div className="container-page">
           <Breadcrumbs
             items={[{ label: "Services", href: "/services" }, { label: service.name }]}
@@ -75,15 +75,17 @@ export default async function ServiceDetailPage({ params }: Props) {
           <div className="mt-8 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <Reveal>
               <p className="eyebrow">Service</p>
-              <h1 className="mt-3 text-3xl leading-[1.05] font-semibold md:text-5xl">{service.name}</h1>
-              <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
+              <h1 className="mt-3 text-3xl text-ink-foreground/90 leading-[1.05] font-semibold md:text-5xl">
+                {service.name}
+              </h1>
+              <p className="mt-5 text-sm leading-relaxed text-ink-foreground/50 md:text-base">
                 {service.short}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button className="w-full sm:w-auto" asChild size="default">
                   <Link href={bookCta.to}>{bookCta.label}</Link>
                 </Button>
-                <Button className="w-full sm:w-auto" asChild variant="outline" size="default">
+                <Button className="w-full sm:w-auto border-0 text-ink-foreground/70" asChild variant="onDark" size="default">
                   <Link href="/contact">Ask a Question</Link>
                 </Button>
               </div>
@@ -138,6 +140,53 @@ export default async function ServiceDetailPage({ params }: Props) {
           </Reveal>
 
           <Reveal delay={90}>
+            {service.options && service.options.length > 0 && (
+              <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-soft mb-6">
+                <div className="flex items-center justify-between pb-3 border-b border-border/60">
+                  <h3 className="font-display text-xl font-semibold">Appointment Options</h3>
+                  <span className="text-xs font-semibold text-ink">
+                    {service.options.length} {service.options.length === 1 ? "Option" : "Options"}
+                  </span>
+                </div>
+                <div className="mt-4 space-y-3">
+                  {service.options.map((opt) => (
+                    <div
+                      key={opt.id}
+                      className="rounded-xl border border-border/70 bg-sand/40 p-4 transition-all hover:border-brand/40 space-y-2"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h4 className="font-semibold text-sm text-foreground">{opt.name}</h4>
+                            {opt.newClientsOnly && (
+                              <span className="rounded-full bg-brand text-ink px-2 py-0.5 text-[0.65rem] font-semibold">
+                                New Clients Only
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground font-medium">
+                            <span className="text-foreground">⏱ {opt.durationDisplay}</span>
+                            <span>•</span>
+                            <span className="font-bold text-foreground text-sm">{opt.priceDisplay}</span>
+                          </div>
+                        </div>
+                        <Button asChild size="sm" className="shrink-0">
+                          <Link href={`/book?service=${service.slug}&option=${opt.id}`}>
+                            Book
+                          </Link>
+                        </Button>
+                      </div>
+                      {opt.note && (
+                        <p className="text-xs text-muted-foreground leading-relaxed pt-1 border-t border-border/40">
+                          {opt.note}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="rounded-lg bg-sand p-6 md:p-8">
               <h3 className="font-display text-xl font-semibold">What to expect</h3>
               <ol className="mt-5 grid gap-5">

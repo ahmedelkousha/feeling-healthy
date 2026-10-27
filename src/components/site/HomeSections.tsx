@@ -34,9 +34,9 @@ export function Hero() {
             </Button>
             <Button
               asChild
-              variant="onDark"
+              variant="ink"
               size="sm"
-              className="w-full sm:w-auto sm:px-5 sm:py-5.5"
+              className="w-full sm:w-auto sm:px-5 sm:py-5.5 after:bg-sand"
             >
               <Link href="/services">Explore Our Services</Link>
             </Button>

@@ -16,7 +16,8 @@ export const practitioners: Practitioner[] = [
     slug: "rosanna-mosca",
     name: "Rosanna Mosca",
     title: "Director, Senior Naturopath & Psychotherapist",
-    specialty: "Naturopathy, Clinical Hypnosis, Psychotherapy, Counselling & Holistic Energy Health",
+    specialty:
+      "Naturopathy, Clinical Hypnosis, Psychotherapy, Counselling & Holistic Energy Health",
     bio: [
       "With over 25 years of experience, Rosanna Mosca has a vast variety of tools and techniques to help you make your life and health the best it can be.",
       "After completing her degree in Naturopathy she went on to study everything she could about the mind and gained qualifications in Clinical Hypnosis, Psychotherapy and Counselling.",
@@ -35,18 +36,24 @@ export const practitioners: Practitioner[] = [
       "Diagnostic Testing",
     ],
     serviceSlugs: [
+      // Selected services
       "naturopathy",
-      "dietary-advice",
-      "nutrition",
-      "weight-management",
       "clinical-hypnosis",
-      "thought-field-therapy",
       "counselling",
-      "digestive-problems",
-      "womens-health",
-      "hypnobirthing",
-      "childrens-health",
-      "diagnostic-testing",
+      "thought-field-therapy",
+      "acute-telephone-support",
+      "free-holistic-health-review",
+      "six-session-transformation",
+      "twelve-session-transformation",
+      // Commented out other services:
+      // "dietary-advice",
+      // "nutrition",
+      // "weight-management",
+      // "digestive-problems",
+      // "womens-health",
+      // "hypnobirthing",
+      // "childrens-health",
+      // "diagnostic-testing",
     ],
     qualifications: [
       "Degree in Naturopathy",
@@ -78,11 +85,17 @@ export const practitioners: Practitioner[] = [
       "Relaxation & Therapeutic Massage",
     ],
     serviceSlugs: [
-      "massage",
-      "sports-injuries",
-      "stress-anxiety",
-      "fatigue",
-      "fertility-pregnancy",
+      // Selected services
+      "remedial-massage",
+      "relaxation-massage",
+      "pregnancy-massage",
+      "bowen-therapy",
+      // Commented out other services:
+      // "massage",
+      // "sports-injuries",
+      // "stress-anxiety",
+      // "fatigue",
+      // "fertility-pregnancy",
     ],
     qualifications: [
       "Diploma of Remedial Massage",

@@ -179,7 +179,7 @@ export function PemfThzOrderForm({
                   Select your product and enter your details below. Our reception team will reach out to fulfill your order and answer any questions.
                 </p>
               </div>
-              <div className="rounded-sm bg-sand p-3 text-right hidden lg:block">
+              <div className="rounded-md bg-sand p-3 text-right hidden lg:block">
                 <p className="text-[0.68rem] uppercase font-bold text-muted-foreground">Selected Item</p>
                 <p className="text-sm font-bold text-brand-dark">{selectedProduct.name}</p>
                 <p className="text-xs font-semibold text-foreground">{selectedProduct.price}</p>
@@ -206,7 +206,7 @@ export function PemfThzOrderForm({
                       setFormData({ ...formData, productId: e.target.value });
                       onProductChange(e.target.value);
                     }}
-                    className="w-full rounded-sm border border-input bg-background px-4 py-3 text-sm font-semibold text-foreground shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
+                    className="w-full rounded-lg border border-input bg-background px-4 py-2 text-xs font-semibold text-foreground shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
                   >
                     {pemfThzProducts.map((prod) => (
                       <option key={prod.id} value={prod.id}>
@@ -224,7 +224,7 @@ export function PemfThzOrderForm({
                     id="quantity"
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                    className="w-full rounded-sm border border-input bg-background px-4 py-3 text-sm font-semibold text-foreground shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
+                    className="w-full rounded-lg border border-input bg-background px-4 py-2 text-xs font-semibold text-foreground shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
                   >
                     {[1, 2, 3, 4, 5].map((num) => (
                       <option key={num} value={num}>
@@ -242,7 +242,7 @@ export function PemfThzOrderForm({
                 </Label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label
-                    className={`flex items-center gap-3 rounded-sm border p-4 cursor-pointer transition-colors ${
+                    className={`flex items-center gap-3 rounded-lg border p-4 cursor-pointer transition-colors ${
                       formData.deliveryMethod === "pickup"
                         ? "border-brand bg-brand font-semibold text-foreground shadow-xs"
                         : "border-border bg-background hover:bg-sand text-muted-foreground"
@@ -264,7 +264,7 @@ export function PemfThzOrderForm({
                   </label>
 
                   <label
-                    className={`flex items-center gap-3 rounded-sm border p-4 cursor-pointer transition-colors ${
+                    className={`flex items-center gap-3 rounded-lg border p-4 cursor-pointer transition-colors ${
                       formData.deliveryMethod === "shipping"
                         ? "border-brand bg-brand font-semibold text-foreground shadow-xs"
                         : "border-border bg-background hover:bg-sand text-muted-foreground"
@@ -299,7 +299,7 @@ export function PemfThzOrderForm({
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     required
-                    className="rounded-sm"
+                    className="rounded-lg"
                   />
                 </div>
 
@@ -314,7 +314,7 @@ export function PemfThzOrderForm({
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     required
-                    className="rounded-sm"
+                    className="rounded-lg"
                   />
                 </div>
 
@@ -329,7 +329,7 @@ export function PemfThzOrderForm({
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
-                    className="rounded-sm"
+                    className="rounded-lg"
                   />
                 </div>
               </div>
@@ -345,7 +345,7 @@ export function PemfThzOrderForm({
                     placeholder="Street address, suburb, state, postcode"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="rounded-sm"
+                    className="rounded-lg"
                   />
                 </div>
               )}
@@ -362,11 +362,11 @@ export function PemfThzOrderForm({
                     rows={3}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="rounded-sm"
+                    className="rounded-lg"
                   />
                 </div>
 
-                <label className="flex items-center gap-3 rounded-sm bg-sand/50 p-3.5 cursor-pointer hover:bg-sand transition-colors">
+                <label className="flex items-center gap-3 rounded-lg bg-sand/50 p-3.5 cursor-pointer hover:bg-sand transition-colors">
                   <input
                     type="checkbox"
                     checked={formData.requestConsultation}
@@ -383,14 +383,14 @@ export function PemfThzOrderForm({
               {/* Submit Button */}
               <div className="pt-2 flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
-                  <p className="text-xs text-muted-foreground">
-                    🔒 You will be securely redirected to Stripe to complete payment.
+                  <p className="text-xs text-muted-foreground inline-flex gap-1 items-start">
+                    <ShieldCheck className="size-3.5" /> You will be securely redirected to complete payment. Payments are securely processed by Stripe. We never see your card details.
                   </p>
 
                   <Button
                     type="submit"
                     disabled={loading}
-                    size="lg"
+                    size="default"
                     className="w-full sm:w-auto gap-2 font-bold px-8 shadow-soft cursor-pointer"
                   >
                     {loading ? (
@@ -400,9 +400,9 @@ export function PemfThzOrderForm({
                     )}
                   </Button>
                 </div>
-                <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                {/* <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <ShieldCheck className="size-3.5" /> Payments are securely processed by Stripe. We never see your card details.
-                </p>
+                </p> */}
               </div>
             </form>
           </div>

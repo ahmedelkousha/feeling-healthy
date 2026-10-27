@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowUp, HelpCircle, X, Phone, Calendar, Mail, MapPin, MessageSquare, MessageCircle } from "lucide-react";
+import { ArrowUp, HelpCircle, X, Phone, Calendar, Mail, MapPin, MessageSquare, MessageCircle, HelpCircleIcon, HelpingHand } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { site, bookCta } from "@/data/site";
 import { useLinkClickEvent } from "@/hooks/useLinkClickEvent";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export function FloatingButtons() {
+  const pathname = usePathname();
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const handleLinkClick = useLinkClickEvent();
@@ -44,7 +46,7 @@ export function FloatingButtons() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 pointer-events-none">
+    <div className={`fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 pointer-events-none ${pathname?.startsWith('/admin') ? 'hidden' : 'block'}`}>
       {/* Quick Help Popover Modal */}
       <AnimatePresence>
         {helpOpen && (
@@ -63,13 +65,13 @@ export function FloatingButtons() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="relative z-50 w-72 sm:w-80 rounded-3xl border border-border/80 bg-background/95 p-5 shadow-lift backdrop-blur-xl pointer-events-auto mb-2"
+              className="relative z-50 w-72 sm:w-80 rounded-xl border border-border/80 bg-background/95 py-4 px-3 shadow-lift backdrop-blur-xl pointer-events-auto mb-2"
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-border/60 pb-3">
                 <div className="flex items-center gap-2">
-                  <div className="grid size-8 place-items-center rounded-xl bg-brand/20 text-brand-dark">
-                    <MessageSquare className="size-4" />
+                  <div className="grid size-8 place-items-center rounded-xl bg-brand text-ink">
+                    <HelpCircle className="size-4" />
                   </div>
                   <div>
                     <h3 className="font-display text-sm font-semibold text-foreground">How can we help?</h3>
@@ -96,9 +98,9 @@ export function FloatingButtons() {
                       cb?.();
                     })
                   }
-                  className="group flex items-center gap-3 rounded-2xl bg-brand p-3 text-sm font-medium text-brand-foreground shadow-xs transition-all hover:bg-brand-dark hover:shadow-soft"
+                  className="group flex items-center gap-3 rounded-2xl bg-brand hover:bg-brand/80 p-3 text-sm font-medium text-brand-foreground shadow-xs transition-all"
                 >
-                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand-foreground/15">
+                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-card text-brand">
                     <Calendar className="size-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -111,17 +113,17 @@ export function FloatingButtons() {
                   href="https://wa.me/61756074152?text=Hello%20Feeling%20Healthy%2C%20I%20have%20a%20question%20about..."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 rounded-2xl border border-emerald-500/25 bg-emerald-50/50 dark:bg-emerald-950/20 p-3 text-sm transition-all hover:border-emerald-500/50 hover:bg-emerald-100/60"
+                  className="group flex items-center gap-3 rounded-2xl border border-emerald-500/25 bg-emerald-500 p-3 text-sm transition-all hover:border-emerald-500 hover:bg-emerald-500/80"
                 >
-                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-card text-emerald-600 ">
                     <MessageCircle className="size-4" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
                       <span>Chat on WhatsApp</span>
-                      <span className="inline-block size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      {/* <span className="inline-block size-1.5 rounded-full bg-emerald-400 animate-pulse" /> */}
                     </p>
-                    <p className="text-[0.65rem] text-muted-foreground mt-0.5">Instant messaging support</p>
+                    <p className="text-[0.65rem] text-ink mt-0.5">Instant messaging support</p>
                   </div>
                 </a>
 
@@ -129,7 +131,7 @@ export function FloatingButtons() {
                   href={`tel:${site.contact.phone}`}
                   className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-3 text-sm transition-all hover:border-brand/50 hover:bg-sand/60"
                 >
-                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand/20 text-brand-dark">
+                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand text-ink">
                     <Phone className="size-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -148,7 +150,7 @@ export function FloatingButtons() {
                   }
                   className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-3 text-sm transition-all hover:border-brand/50 hover:bg-sand/60"
                 >
-                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand/20 text-brand-dark">
+                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand text-ink">
                     <Mail className="size-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -163,7 +165,7 @@ export function FloatingButtons() {
                   rel="noopener noreferrer"
                   className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-3 text-sm transition-all hover:border-brand/50 hover:bg-sand/60"
                 >
-                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand/20 text-brand-dark">
+                  <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-brand text-ink">
                     <MapPin className="size-4" />
                   </div>
                   <div className="flex-1 min-w-0">

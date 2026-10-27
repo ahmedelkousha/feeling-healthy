@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, ShoppingBag, Info, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { pemfThzProducts, type PemfThzProduct } from "@/data/pemfThz";
+import { getProducts } from "@/lib/firebase/services";
 import { cn } from "@/lib/utils";
 
 interface PemfThzProductsProps {
@@ -11,15 +12,22 @@ interface PemfThzProductsProps {
 }
 
 export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
+  const [items, setItems] = useState<PemfThzProduct[]>(pemfThzProducts);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [activeModalProduct, setActiveModalProduct] = useState<PemfThzProduct | null>(null);
+
+  useEffect(() => {
+    getProducts()
+      .then((res) => {
+        if (res && res.length > 0) setItems(res);
+      })
+      .catch(() => {});
+  }, []);
 
   const categories = ["All", "Terahertz", "PEMF", "Dual-Tech"];
 
   const filteredProducts =
-    selectedCategory === "All"
-      ? pemfThzProducts
-      : pemfThzProducts.filter((p) => p.category === selectedCategory);
+    selectedCategory === "All" ? items : items.filter((p) => p.category === selectedCategory);
 
   const handleOrderClick = (productId: string) => {
     onSelectProduct(productId);
@@ -30,7 +38,7 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
   };
 
   return (
-    <section id="products" className="py-4">
+    <section id="products" className="py-4 md:scroll-mt-90 scroll-mt-76">
       {/* Category Filter Pills */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
         {categories.map((cat) => (
@@ -55,18 +63,18 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="relative flex flex-col justify-between overflow-hidden rounded-lg border-2 border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:shadow-lift hover:border-brand/50"
+            className="relative flex flex-col justify-between overflow-hidden rounded-xl border-2 border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:shadow-lift hover:border-brand/50"
           >
-            <div className="absolute top-5 left-5  flex flex-wrap gap-1.5 z-10">
-                  {product.badge && (
-                    <span className="rounded-full bg-brand px-3 py-1 text-[0.7rem] font-bold text-brand-foreground shadow-sm">
-                      {product.badge}
-                    </span>
-                  )}
-                  <span className="rounded-full bg-ink/80 backdrop-blur-md px-2.5 py-1 text-[0.68rem] font-medium text-ink-foreground">
-                    {product.category}
-                  </span>
-                </div>
+            {/* <div className="absolute top-5 left-5  flex flex-wrap gap-1.5 z-10">
+              {product.badge && (
+                <span className="rounded-full bg-brand px-3 py-1 text-[0.7rem] font-bold text-brand-foreground shadow-sm">
+                  {product.badge}
+                </span>
+              )}
+              <span className="rounded-full bg-ink/80 backdrop-blur-md px-2.5 py-1 text-[0.68rem] font-medium text-ink-foreground">
+                {product.category}
+              </span>
+            </div> */}
             <div>
               {/* Product Image & Badges */}
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
@@ -76,7 +84,6 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
                   className="size-full object-cover transition-transform duration-500"
                   loading="lazy"
                 />
-                
               </div>
 
               {/* Title & Price */}
