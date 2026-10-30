@@ -1,7 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { CreditCard, RotateCcw, Search, CheckCircle, AlertCircle, RefreshCw, X, ShieldAlert } from "lucide-react";
+import {
+  CreditCard,
+  RotateCcw,
+  Search,
+  CheckCircle,
+  AlertCircle,
+  RefreshCw,
+  X,
+  ShieldAlert,
+  ChevronDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -59,7 +69,9 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
     const maxRefundable = refundModalOrder.amountTotal - refundModalOrder.amountRefunded;
 
     if (amountInCents > maxRefundable) {
-      toast.error(`Refund amount cannot exceed remaining balance of $${(maxRefundable / 100).toFixed(2)}.`);
+      toast.error(
+        `Refund amount cannot exceed remaining balance of $${(maxRefundable / 100).toFixed(2)}.`,
+      );
       return;
     }
 
@@ -121,7 +133,13 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
             className="pl-9"
           />
         </div>
-        <Button variant="outline" size="sm" onClick={onRefresh} disabled={loading} className="gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onRefresh}
+          disabled={loading}
+          className="gap-2"
+        >
           <RefreshCw className={`size-4 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
@@ -163,7 +181,8 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
                     year: "numeric",
                   });
                   const isPaid = order.paymentStatus === "paid";
-                  const canRefund = isPaid && order.refundStatus !== "full" && order.paymentIntentId;
+                  const canRefund =
+                    isPaid && order.refundStatus !== "full" && order.paymentIntentId;
 
                   return (
                     <tr key={order.id} className="hover:bg-muted/30 transition-colors">
@@ -183,7 +202,9 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
                             ))
                           ) : (
                             <p className="text-xs text-muted-foreground">
-                              {order.metadata?.type ? `${order.metadata.type}: ${order.metadata.slug}` : "Booking Order"}
+                              {order.metadata?.type
+                                ? `${order.metadata.type}: ${order.metadata.slug}`
+                                : "Booking Order"}
                             </p>
                           )}
                         </div>
@@ -267,7 +288,9 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
               <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-2">
                 <div className="flex justify-between text-xs">
                   <span className="text-muted-foreground">Customer:</span>
-                  <span className="font-semibold text-foreground">{refundModalOrder.customerName}</span>
+                  <span className="font-semibold text-foreground">
+                    {refundModalOrder.customerName}
+                  </span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-muted-foreground">Email:</span>
@@ -282,7 +305,9 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
                 {refundModalOrder.amountRefunded > 0 && (
                   <div className="flex justify-between text-xs text-destructive">
                     <span>Already Refunded:</span>
-                    <span>-{formatCurrency(refundModalOrder.amountRefunded, refundModalOrder.currency)}</span>
+                    <span>
+                      -{formatCurrency(refundModalOrder.amountRefunded, refundModalOrder.currency)}
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between text-xs pt-1 border-t border-border">
@@ -290,14 +315,16 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
                   <span className="font-bold text-foreground">
                     {formatCurrency(
                       refundModalOrder.amountTotal - refundModalOrder.amountRefunded,
-                      refundModalOrder.currency
+                      refundModalOrder.currency,
                     )}
                   </span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="refund-amount">Refund Amount ({refundModalOrder.currency.toUpperCase()})</Label>
+                <Label htmlFor="refund-amount">
+                  Refund Amount ({refundModalOrder.currency.toUpperCase()})
+                </Label>
                 <Input
                   id="refund-amount"
                   type="number"
@@ -308,13 +335,15 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
                 />
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative">
+                <ChevronDown className="absolute size-4 text-ink right-3 top-[52%]" />
+
                 <Label htmlFor="refund-reason">Refund Reason</Label>
                 <select
                   id="refund-reason"
                   value={refundReason}
                   onChange={(e) => setRefundReason(e.target.value)}
-                  className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                  className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand appearance-none"
                 >
                   <option value="requested_by_customer">Customer Request / Cancellation</option>
                   <option value="duplicate">Duplicate Charge</option>
@@ -323,8 +352,8 @@ export function StripeOrdersManager({ orders, loading, onRefresh }: StripeOrders
               </div>
 
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Refunding directly credits the customer&apos;s original payment method via Stripe. Stripe processing
-                fees are non-reversible.
+                Refunding directly credits the customer&apos;s original payment method via Stripe.
+                Stripe processing fees are non-reversible.
               </p>
 
               <div className="mt-6 flex justify-end gap-3 pt-4 border-t border-border">

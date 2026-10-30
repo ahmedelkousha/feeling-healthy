@@ -5,7 +5,6 @@ import { Check, ShoppingBag, Info, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { pemfThzProducts, type PemfThzProduct } from "@/data/pemfThz";
 import { getProducts } from "@/lib/firebase/services";
-import { cn } from "@/lib/utils";
 
 interface PemfThzProductsProps {
   onSelectProduct: (productId: string) => void;
@@ -24,8 +23,6 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
       .catch(() => {});
   }, []);
 
-  const categories = ["All", "Terahertz", "PEMF", "Dual-Tech"];
-
   const filteredProducts =
     selectedCategory === "All" ? items : items.filter((p) => p.category === selectedCategory);
 
@@ -39,24 +36,6 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
 
   return (
     <section id="products" className="py-4 md:scroll-mt-90 scroll-mt-76">
-      {/* Category Filter Pills */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            type="button"
-            onClick={() => setSelectedCategory(cat)}
-            className={cn(
-              "px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer",
-              selectedCategory === cat
-                ? "bg-brand text-brand-foreground shadow-sm scale-105"
-                : "bg-sand text-muted-foreground hover:bg-sand/70",
-            )}
-          >
-            {cat === "All" ? "All Products" : `${cat} Series`}
-          </button>
-        ))}
-      </div>
 
       {/* Product Cards Grid */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

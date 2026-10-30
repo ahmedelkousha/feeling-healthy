@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { services } from "@/data/services";
 import { pemfThzProducts } from "@/data/pemfThz";
-import { getProducts } from "@/lib/firebase/services";
+import { getProducts, ProductItem } from "@/lib/firebase/services";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,6 +17,9 @@ export async function POST(req: NextRequest) {
       metadata,
     } = body;
 
+    // Whole number between 1 and 10
+    const qty = Math.min(Math.max(Math.floor(Number(quantity)) || 1, 1), 10);
+
     /* ────────────────────────────────────────────
      * Look up price SERVER-SIDE so clients can't
      * tamper with the amount they're charged.
@@ -24,6 +28,7 @@ export async function POST(req: NextRequest) {
     let unitAmount: number;
     let currency: string = "aud";
     let description: string;
+    let feePercent = 0;
 
     if (type === "service") {
       const service = services.find((s) => s.slug === slug);
@@ -37,7 +42,8 @@ export async function POST(req: NextRequest) {
       description = option?.note || `Feeling Healthy — ${itemName} appointment`;
     } else if (type === "product") {
       const allProducts = await getProducts();
-      const product = allProducts.find((p) => p.id === slug) || pemfThzProducts.find((p) => p.id === slug);
+      const product: ProductItem | undefined =
+        allProducts.find((p) => p.id === slug) || pemfThzProducts.find((p) => p.id === slug);
       if (!product) {
         return NextResponse.json({ error: `Product "${slug}" not found.` }, { status: 400 });
       }
@@ -45,6 +51,7 @@ export async function POST(req: NextRequest) {
       unitAmount = product.priceInCents;
       currency = product.currency;
       description = `Feeling Healthy — ${product.name} device`;
+      feePercent = Math.min(100, Math.max(0, Number(product.feePercent) || 0));
     } else {
       return NextResponse.json(
         { error: "Invalid type. Must be 'service' or 'product'." },
@@ -52,37 +59,58 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const session = await stripe.checkout.sessions.create(
+    /* ────────────────────────────────────────────
+     * Fee = percentage of the subtotal (price × qty),
+     * rounded to the nearest cent. Same formula as the
+     * order form so the totals match.
+     * ──────────────────────────────────────────── */
+    const subtotalInCents = unitAmount * qty;
+    const feeInCents = Math.round((subtotalInCents * feePercent) / 100);
+
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [
       {
-        mode: "payment",
-        customer_email: customerEmail || undefined,
-        currency,
-        line_items: [
-          {
-            price_data: {
-              currency,
-              product_data: {
-                name: itemName,
-                description,
-              },
-              unit_amount: unitAmount,
-            },
-            quantity: quantity || 1,
+        price_data: {
+          currency,
+          product_data: {
+            name: itemName,
+            description,
           },
-        ],
-        metadata: {
-          type,
-          slug,
-          customerName: customerName || "",
-          ...metadata,
+          unit_amount: unitAmount,
         },
-        success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/cancel`,
+        quantity: qty,
       },
-      {
-        idempotencyKey: slug,
+    ];
+
+    if (feeInCents > 0) {
+      lineItems.push({
+        price_data: {
+          currency,
+          product_data: {
+            name: `Shipping Fee (${feePercent}%)`,
+          },
+          unit_amount: feeInCents,
+        },
+        quantity: 1,
+      });
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      customer_email: customerEmail || undefined,
+      currency,
+      line_items: lineItems,
+      metadata: {
+        type,
+        slug,
+        customerName: customerName || "",
+        quantity: String(qty),
+        feePercent: String(feePercent),
+        feeInCents: String(feeInCents),
+        ...metadata,
       },
-    );
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/cancel`,
+    });
 
     return NextResponse.json({ url: session.url });
   } catch (err: unknown) {

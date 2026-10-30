@@ -1,7 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Edit2, Trash2, Search, ExternalLink, X, Package, RefreshCw } from "lucide-react";
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Search,
+  ExternalLink,
+  X,
+  Package,
+  RefreshCw,
+  ChevronDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,6 +40,7 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
   const [badge, setBadge] = useState("");
   const [price, setPrice] = useState("$499 AUD");
   const [priceInCents, setPriceInCents] = useState(49900);
+  const [feePercent, setFeePercent] = useState(""); // string so the field can be empty
   const [currency, setCurrency] = useState<"usd" | "aud">("aud");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("/images/pemf-thz/classic.webp");
@@ -45,6 +56,7 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
     setBadge("");
     setPrice("$499 AUD");
     setPriceInCents(49900);
+    setFeePercent("");
     setCurrency("aud");
     setDescription("");
     setImage("/images/pemf-thz/classic.webp");
@@ -62,6 +74,7 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
     setBadge(product.badge || "");
     setPrice(product.price);
     setPriceInCents(product.priceInCents);
+    setFeePercent(product.feePercent ? String(product.feePercent) : "");
     setCurrency(product.currency);
     setDescription(product.description);
     setImage(product.image);
@@ -77,7 +90,7 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
         val
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "")
+          .replace(/(^-|-$)/g, ""),
       );
     }
   };
@@ -115,13 +128,16 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
         name,
         tagline: tagline || name,
         category,
-        badge: badge ? badge : undefined,
+        // Firestore rejects undefined values, so store an empty string instead
+        badge: badge || "",
         price,
         priceInCents: Number(priceInCents) || 10000,
+        feePercent: Math.min(100, Math.max(0, Number(feePercent) || 0)),
         currency,
         description,
         image: image || "/images/pemf-thz/classic.webp",
-        benefits: benefits.length > 0 ? benefits : ["Cellular revitalization", "Non-invasive therapy"],
+        benefits:
+          benefits.length > 0 ? benefits : ["Cellular revitalization", "Non-invasive therapy"],
         specs: specs.length > 0 ? specs : ["Standard 110V/240V Support"],
       };
 
@@ -154,10 +170,16 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
     }
   };
 
+  // Calculated fee preview (percentage of the base price)
+  const feeAmountInCents = Math.round((priceInCents * (Number(feePercent) || 0)) / 100);
+  const totalInCents = priceInCents + feeAmountInCents;
+  const formatMoney = (cents: number) =>
+    `$${(cents / 100).toFixed(2)} ${currency.toUpperCase()}`;
+
   const filtered = products.filter(
     (p) =>
       p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.category.toLowerCase().includes(search.toLowerCase())
+      p.category.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -174,11 +196,17 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
           />
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={onRefresh} disabled={loading} className="gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onRefresh}
+            disabled={loading}
+            className="gap-2"
+          >
             <RefreshCw className={`size-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
-          <Button size='sm' onClick={openAddModal} className="gap-2">
+          <Button size="sm" onClick={openAddModal} className="gap-2">
             <Plus className="size-4" />
             Add New Product
           </Button>
@@ -217,7 +245,9 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
                         />
                         <div className="min-w-0">
                           <p className="font-semibold text-foreground line-clamp-1">{prod.name}</p>
-                          <p className="text-xs text-muted-foreground line-clamp-1">{prod.tagline}</p>
+                          <p className="text-xs text-muted-foreground line-clamp-1">
+                            {prod.tagline}
+                          </p>
                         </div>
                       </div>
                     </td>
@@ -228,6 +258,11 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
                     </td>
                     <td className="px-5 py-4 whitespace-nowrap font-medium text-foreground">
                       {prod.price}
+                      {!!prod.feePercent && (
+                        <span className="block text-xs font-normal text-muted-foreground">
+                          + {prod.feePercent}% shipping fee
+                        </span>
+                      )}
                     </td>
                     <td className="px-5 py-4 whitespace-nowrap">
                       {prod.badge ? (
@@ -324,13 +359,15 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
                   />
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 relative">
+                  <ChevronDown className="absolute size-4 text-ink right-3 top-[55%]" />
+
                   <Label htmlFor="prod-cat">Category</Label>
                   <select
                     id="prod-cat"
                     value={category}
                     onChange={(e) => setCategory(e.target.value as any)}
-                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    className="h-9 w-full rounded-lg border border-input bg-background px-3 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand text-sm appearance-none"
                   >
                     <option value="Terahertz">Terahertz</option>
                     <option value="PEMF">PEMF</option>
@@ -369,6 +406,25 @@ export function ProductManager({ products, loading, onRefresh }: ProductManagerP
                     placeholder="49900"
                     required
                   />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="prod-fee">Shipping Fee (%)</Label>
+                  <Input
+                    id="prod-fee"
+                    type="number"
+                    min={0}
+                    max={100}
+                    step="0.01"
+                    value={feePercent}
+                    onChange={(e) => setFeePercent(e.target.value)}
+                    placeholder="0"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {Number(feePercent) > 0
+                      ? `Shipping fee: ${formatMoney(feeAmountInCents)} · Total at checkout: ${formatMoney(totalInCents)}`
+                      : "Shipping fee as a percentage added on top of the price. Leave 0 for none."}
+                  </p>
                 </div>
 
                 <div className="space-y-1.5 sm:col-span-2">

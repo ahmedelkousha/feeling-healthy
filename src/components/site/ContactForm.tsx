@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
 import { addInquiry } from "@/lib/firebase/services";
+import { ChevronDown } from "lucide-react";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(100),
@@ -23,7 +24,7 @@ type Errors = Partial<Record<keyof z.infer<typeof schema>, string>>;
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-    const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -71,8 +72,8 @@ export function ContactForm() {
         <p className="script-accent text-2xl">Thank you</p>
         <h3 className="mt-3 text-xl font-semibold">Your message has been received</h3>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          We have recorded your enquiry and a member of the Feeling Healthy team will be in touch soon.
-          If your request is urgent, please feel free to call us at {site.contact.phone}.
+          We have recorded your enquiry and a member of the Feeling Healthy team will be in touch
+          soon. If your request is urgent, please feel free to call us at {site.contact.phone}.
         </p>
         <Button variant="outline" className="mt-6" onClick={() => setSent(false)}>
           Send another message
@@ -87,13 +88,15 @@ export function ContactForm() {
         <Field label="Name" name="name" error={errors.name} required />
         <Field label="Email" name="email" type="email" error={errors.email} required />
         <Field label="Phone" name="phone" type="tel" error={errors.phone} />
-        <div className="grid gap-2">
+        <div className="grid gap-2 relative">
+          <ChevronDown className="absolute size-4 text-ink right-3 top-[52%]" />
+
           <Label htmlFor="service">Service of interest</Label>
           <select
             id="service"
             name="service"
             defaultValue=""
-            className="h-11 rounded-sm border border-input bg-background px-3 text-sm"
+            className="h-9 rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand appearance-none"
           >
             <option value="">Not sure yet</option>
             {services.map((s) => (
@@ -109,7 +112,7 @@ export function ContactForm() {
         <Label htmlFor="message">
           Message <span aria-hidden="true">*</span>
         </Label>
-        <Textarea id="message" name="message" rows={5} maxLength={1000} className="rounded-sm" />
+        <Textarea id="message" name="message" rows={5} maxLength={1000} className="rounded-lg" />
         {errors.message ? (
           <p className="text-sm text-destructive" role="alert">
             {errors.message}
@@ -142,7 +145,7 @@ function Field({
       <Label htmlFor={name}>
         {label} {required ? <span aria-hidden="true">*</span> : null}
       </Label>
-      <Input id={name} name={name} type={type} className="h-11 rounded-sm" />
+      <Input id={name} name={name} type={type} className="h-9 rounded-lg" />
       {error ? (
         <p className="text-sm text-destructive" role="alert">
           {error}

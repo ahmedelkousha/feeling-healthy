@@ -16,7 +16,10 @@ import { articles, Article } from "@/data/resources";
 import { pemfThzProducts, PemfThzProduct } from "@/data/pemfThz";
 
 export type BlogItem = Article & { id?: string; createdAt?: string };
-export type ProductItem = PemfThzProduct & { createdAt?: string };
+export type ProductItem = PemfThzProduct & {
+  createdAt?: string;
+  feePercent?: number;
+};
 
 export type InquiryItem = {
   id?: string;
