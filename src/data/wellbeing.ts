@@ -161,7 +161,7 @@ export const finderOptions: { id: string; label: string; serviceSlugs: string[] 
   },
   {
     id: "physical",
-    label: "Physical Health & Massage",
+    label: "Massage & Physical Health",
     serviceSlugs: ["naturopathy", "remedial-massage", "relaxation-massage", "pregnancy-massage", "bowen-therapy"],
   },
   {

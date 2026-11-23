@@ -128,7 +128,7 @@ export function Navbar() {
               </a>
               <span className="hidden sm:inline-flex items-center gap-1.5">
                 <Clock className="size-3.5 shrink-0" />
-                <span className="text-nowrap">Mon–Sat 9:00am – 5:00pm</span>
+                <span className="text-nowrap">Mon–Fri 9:00am – 3:00pm</span>
               </span>
             </div>
 
@@ -574,7 +574,7 @@ export function Navbar() {
               <div className="rounded-sm border border-brand/40 bg-sand/60 p-5 space-y-3">
                 <div className="flex items-center gap-2 text-xs font-medium text-foreground/80">
                   <Clock className="size-4 text-brand-dark shrink-0" />
-                  <span>Mon–Sat 9:00am – 5:00pm</span>
+                  <span>Mon–Fri 9:00am – 3:00pm</span>
                 </div>
                 <p className="text-xs leading-relaxed text-muted-foreground">
                   {site.contact.address}

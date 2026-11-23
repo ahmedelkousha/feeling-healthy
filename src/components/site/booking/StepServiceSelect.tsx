@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { ChoiceButton, StepShell } from "./BookingUI";
 
 const categoryTitles: Record<string, string> = {
-  physical: "Physical Health & Massage",
+  physical: "Massage & Physical Health",
   mind: "Psychotherapy & Counselling",
   nutrition: "Nutrition & Dietetics",
   womens: "Women's Health",
@@ -87,7 +87,9 @@ export function StepServiceSelect({
       (s) =>
         s.name.toLowerCase().includes(q) ||
         s.short.toLowerCase().includes(q) ||
-        s.description.toLowerCase().includes(q) ||
+        (Array.isArray(s.description)
+          ? s.description.some((d) => d.toLowerCase().includes(q))
+          : s.description.toLowerCase().includes(q)) ||
         (categoryTitles[s.category] && categoryTitles[s.category].toLowerCase().includes(q)),
     );
   }, [serviceSearch]);

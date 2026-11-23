@@ -10,6 +10,7 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  writeBatch,
 } from "firebase/firestore";
 import { db } from "./config";
 import { articles, Article } from "@/data/resources";
@@ -201,25 +202,55 @@ export async function deleteSubscriber(id: string): Promise<void> {
 }
 
 /* ────────────────────────────────────────────
- * SEED DEFAULT DATA TO FIRESTORE
+ * SEED & REPLACE DEFAULT DATA TO FIRESTORE
  * ──────────────────────────────────────────── */
-export async function seedInitialData(): Promise<{ blogsCount: number; productsCount: number }> {
-  // Seed blogs
-  for (const article of articles) {
-    const blogDoc = doc(db, "blogs", article.slug);
-    await setDoc(blogDoc, {
-      ...article,
-      createdAt: new Date().toISOString(),
-    });
+export async function seedInitialData(options?: { replace?: boolean }): Promise<{
+  blogsCount: number;
+  productsCount: number;
+}> {
+  const shouldReplace = options?.replace ?? true;
+  const now = new Date().toISOString();
+
+  // 1. Blogs Collection
+  const blogsCol = collection(db, "blogs");
+  if (shouldReplace) {
+    const existingBlogs = await getDocs(blogsCol);
+    for (const d of existingBlogs.docs) {
+      await deleteDoc(d.ref);
+    }
   }
 
-  // Seed products
+  for (const article of articles) {
+    const blogDoc = doc(db, "blogs", article.slug);
+    const sanitized = JSON.parse(
+      JSON.stringify({
+        ...article,
+        id: article.slug,
+        createdAt: now,
+      }),
+    );
+    await setDoc(blogDoc, sanitized);
+  }
+
+  // 2. Products Collection
+  const productsCol = collection(db, "products");
+  if (shouldReplace) {
+    const existingProducts = await getDocs(productsCol);
+    for (const d of existingProducts.docs) {
+      await deleteDoc(d.ref);
+    }
+  }
+
   for (const product of pemfThzProducts) {
     const prodDoc = doc(db, "products", product.id);
-    await setDoc(prodDoc, {
-      ...product,
-      createdAt: new Date().toISOString(),
-    });
+    const sanitized = JSON.parse(
+      JSON.stringify({
+        ...product,
+        id: product.id,
+        createdAt: now,
+      }),
+    );
+    await setDoc(prodDoc, sanitized);
   }
 
   return { blogsCount: articles.length, productsCount: pemfThzProducts.length };

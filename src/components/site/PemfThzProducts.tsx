@@ -73,7 +73,7 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
                   </h3>
                   {/* <p className="text-xs text-muted-foreground font-medium mt-0.5">{product.tagline}</p> */}
                 </div>
-                <span className="shrink-0 rounded-lg bg-sand px-3 py-1 text-sm font-extrabold text-brand-dark">
+                <span className="shrink-0 rounded-lg bg-sand px-3 py-1 text-sm font-extrabold text-brand-foreground/90">
                   {product.price}
                 </span>
               </div>
@@ -106,7 +106,7 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
                 size="default"
               >
                 <ShoppingBag className="size-4" />
-                <span>Order {product.name.split(" ")[0]}</span>
+                <span>Order Now</span>
                 <ArrowDown className="size-3.5 ml-auto opacity-70" />
               </Button>
 

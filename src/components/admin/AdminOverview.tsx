@@ -21,23 +21,29 @@ interface AdminOverviewProps {
 }
 
 export function AdminOverview({ stats, loading, onRefresh, onNavigateTab }: AdminOverviewProps) {
-  // const [seeding, setSeeding] = useState(false);
+  const [seeding, setSeeding] = useState(false);
 
-  // const handleSeed = async () => {
-  //   if (!confirm("This will upload initial blog articles and products into your Firebase Firestore. Continue?")) {
-  //     return;
-  //   }
-  //   setSeeding(true);
-  //   try {
-  //     const res = await seedInitialData();
-  //     toast.success(`Successfully seeded ${res.blogsCount} blogs and ${res.productsCount} products to Firebase!`);
-  //     onRefresh();
-  //   } catch (err: any) {
-  //     toast.error(err.message || "Failed to seed data to Firebase.");
-  //   } finally {
-  //     setSeeding(false);
-  //   }
-  // };
+  const handleSeed = async () => {
+    if (
+      !confirm(
+        "This will REPLACE existing blogs and products in your Firebase Firestore with the latest seed data. Continue?",
+      )
+    ) {
+      return;
+    }
+    setSeeding(true);
+    try {
+      const res = await seedInitialData({ replace: true });
+      toast.success(
+        `Successfully replaced and seeded ${res.blogsCount} blogs and ${res.productsCount} products in Firebase!`,
+      );
+      onRefresh();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to seed data to Firebase.");
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const cards = [
     {
@@ -97,15 +103,15 @@ export function AdminOverview({ stats, loading, onRefresh, onNavigateTab }: Admi
             <RefreshCw className={`size-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
-          {/* <Button
+          <Button
             size="sm"
             onClick={handleSeed}
             disabled={seeding}
-            className="gap-2 bg-brand/80 text-primary-foreground"
+            className="gap-2 bg-brand/80 text-primary-foreground hover:bg-brand"
           >
             <Sparkles className="size-4" />
-            {seeding ? "Seeding..." : "Seed Default Data"}
-          </Button> */}
+            {seeding ? "Replacing & Seeding..." : "Replace & Seed Firebase"}
+          </Button>
         </div>
       </div>
 

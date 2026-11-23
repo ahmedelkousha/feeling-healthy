@@ -110,7 +110,7 @@ export default function PemfThzPage() {
                 className="absolute -bottom-6 -left-6 size-28 blob bg-brand"
               />
               <img
-                src={pemfThzProducts[0].image}
+                src={pemfThzProducts[1].image}
                 alt={`Portrait of ${pemfThzProducts[0].name}`}
                 loading="lazy"
                 width={1024}
@@ -263,7 +263,7 @@ export default function PemfThzPage() {
       </Section>
 
       {/* 4. Products Presented in Grid View */}
-      <Section tone="white">
+      <Section tone="ink">
         <div className="container-page">
           <SectionHeading
             eyebrow="Recommended Devices"

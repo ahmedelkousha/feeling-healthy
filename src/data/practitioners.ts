@@ -15,15 +15,15 @@ export const practitioners: Practitioner[] = [
   {
     slug: "rosanna-mosca",
     name: "Rosanna Mosca",
-    title: "Director, Senior Naturopath & Psychotherapist",
+    title: " Naturopath, Therapist & Wellness Practitioner",
     specialty:
       "Naturopathy, Clinical Hypnosis, Psychotherapy, Counselling & Holistic Energy Health",
     bio: [
-      "With over 25 years of experience, Rosanna Mosca has a vast variety of tools and techniques to help you make your life and health the best it can be.",
-      "After completing her degree in Naturopathy she went on to study everything she could about the mind and gained qualifications in Clinical Hypnosis, Psychotherapy and Counselling.",
-      "We are all made up of energy and energy can be changed. Emotion is energy in motion. If there is a blockage of energy or emotions this creates dis-ease in the body. Once it manifests in the physical body, the stage is set for illness and disease and it needs to be treated on a physical level, e.g. through nourishing the body, removing toxins, and eliminating inflammation.",
-      "To truly heal you need to transform the energy on whatever level it has manifested whether it be physical, mental, spiritual, emotional or nutritional.",
-      "Rosanna conducts a series of tests to ascertain where your body is out of balance. Armed with this knowledge, she will then support you in the way you need most.",
+      "With over 35 years of experience in natural medicine, Rosanna Mosca brings a caring, whole-person approach that looks beyond symptoms to the story behind them.",
+      "Her background includes a Bachelor of Health Science in Naturopathy, along with qualifications in clinical hypnosis and psychotherapy. For the past two years, she has also consulted as a naturopath and health retreat consultant with Barbara O'Neill at respected wellness retreats.",
+      "In clinic, Rosanna combines traditional naturopathic care with modern frequency technologies, including PEMF support, alongside gentle emotional therapies. She uses tools such as hair bio-profile testing to guide individualised care, helping clients understand what might be contributing to imbalance and what can support their recovery.",
+      "Clients come to her seeking clear explanations, practical steps, and a plan that feels personal, not one size fits all.",
+      "At Feeling Healthy Wellness Hub, she offers compassionate consultations designed to help people feel heard, supported, and confident about their next steps.",
     ],
     expertise: [
       "Naturopathy",
@@ -40,6 +40,7 @@ export const practitioners: Practitioner[] = [
       "naturopathy",
       "clinical-hypnosis",
       "counselling",
+      "bowen-therapy",
       "thought-field-therapy",
       "acute-telephone-support",
       "free-holistic-health-review",
@@ -89,7 +90,6 @@ export const practitioners: Practitioner[] = [
       "remedial-massage",
       "relaxation-massage",
       "pregnancy-massage",
-      "bowen-therapy",
       // Commented out other services:
       // "massage",
       // "sports-injuries",

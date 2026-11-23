@@ -6,15 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node --env-file=.env.local scripts/seed.mjs"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
+    "@tailwindcss/postcss": "^4.0.0",
+    "postcss": "^8.5.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
+    "@hookform/resolvers": "^5.2.2",
     "@stripe/stripe-js": "^10.0.0",
-    "@tailwindcss/postcss": "^4.0.0",
     "@types/react-signature-canvas": "^1.0.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

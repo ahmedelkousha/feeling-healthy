@@ -10,14 +10,16 @@ export type ServiceCategory = {
 export const serviceCategories: ServiceCategory[] = [
   {
     id: "physical",
-    title: "Physical Health & Massage",
-    blurb: "Naturopathy, remedial massage, relaxation, and pregnancy bodywork tailored to your body.",
+    title: "Massage & Physical Health",
+    blurb:
+      "Naturopathy, remedial massage, relaxation, and pregnancy bodywork tailored to your body.",
     image: "/images/service-massage.jpg",
   },
   {
     id: "mind",
     title: "Psychotherapy & Counselling",
-    blurb: "Counselling, clinical hypnosis, and thought field therapy supporting clarity, calm, and emotional healing.",
+    blurb:
+      "Counselling, clinical hypnosis, and thought field therapy supporting clarity, calm, and emotional healing.",
     image: "/images/service-counselling.jpg",
   },
   {
@@ -48,11 +50,12 @@ export type ServiceOption = {
 };
 
 export type Service = {
+  practitioner: string;
   slug: string;
   name: string;
   category: CategoryId;
   short: string;
-  description: string;
+  description: string | string[];
   /** Price in cents AUD, e.g. 12000 = $120.00 */
   priceInCents: number;
   /** Human-readable price, e.g. "$120" */
@@ -63,14 +66,15 @@ export type Service = {
   howItHelps: string[];
   whatToExpect: string[];
   whoItsFor: string[];
+  brief?: string;
   faqs?: Faq[];
   related?: string[];
 };
 
-const defaultExpect = (name: string) => [
-  `Your first ${name.toLowerCase()} appointment starts with a relaxed conversation about your health, history and what you'd like support with.`,
-  "Your practitioner explains what a session involves and answers any questions before you begin.",
-  "Together you agree a simple, realistic plan and decide whether follow-up appointments would be useful.",
+const defaultExpect = (name: string,practitioner:string) => [
+  `Your first ${name.toLowerCase()} appointment begins with a relaxed conversation about what's happening in your life, your history and what you'd like support with.`,
+  `${practitioner} identifies the emotional patterns and challenges you would like to work on and explains which therapeutic approaches may be most helpful for you.`,
+  "Using individualised therapeutic techniques, you work together to process emotional experiences, develop new responses and build practical tools to support lasting change.",
 ];
 
 const defaultFaqs = (name: string): Faq[] => [
@@ -106,80 +110,9 @@ const seeds: ServiceSeed[] = [
   // SELECTED SERVICES
   // =========================================================================
 
-  // 1. NATUROPATHY (Naturapathy)
+  // 1. REMEDIAL MASSAGE
   {
-    slug: "naturopathy",
-    name: "Naturopathy",
-    category: "physical",
-    featured: true,
-    ...price(190),
-    image: "/images/service-naturopathy.jpg",
-    short: "A whole-person look at diet, lifestyle and natural health support.",
-    description:
-      "Naturopathy considers the whole picture — how you eat, sleep, move and recover — and looks for simple, sustainable changes that support your body's own balance.",
-    options: [
-      {
-        id: "nat-discovery",
-        name: "Complimentary Health Discovery Session",
-        durationMins: 30,
-        durationDisplay: "30 mins",
-        priceInCents: 0,
-        priceDisplay: "Free",
-        newClientsOnly: true,
-        note: "A free 30 minute appointment. Invest just 30 minutes with one of our Naturopaths to help you discover where and why you may be struggling with your health. We'll help you navigate the world of contradictory nutritional advice, understand exactly what works for you and determine whether natural medicine can help with your health concerns. Please Note: This session is for new clients only.",
-      },
-      {
-        id: "nat-initial",
-        name: "Initial Naturopathic Appointment",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 19000,
-        priceDisplay: "$190",
-        note: "Your first Naturopathy appointment with Feeling Healthy. All Naturopathy appointments are claimable on private health insurance through our HICAPS machine.",
-      },
-      {
-        id: "nat-sub-30",
-        name: "Subsequent Naturopathy",
-        durationMins: 30,
-        durationDisplay: "30 mins",
-        priceInCents: 9500,
-        priceDisplay: "$95",
-        note: "Ongoing consultation to review progress, adjust remedies, and maintain momentum.",
-      },
-      {
-        id: "nat-sub-45",
-        name: "Subsequent Naturopathy",
-        durationMins: 45,
-        durationDisplay: "45 mins",
-        priceInCents: 13500,
-        priceDisplay: "$135",
-        note: "Follow-up consultation to evaluate remedies and support your ongoing health goals.",
-      },
-      {
-        id: "nat-sub-60",
-        name: "Subsequent Naturopathy",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 17500,
-        priceDisplay: "$175",
-        note: "Comprehensive ongoing consultation for in-depth health review and tailored adjustments.",
-      },
-    ],
-    howItHelps: [
-      "A joined-up view of diet, sleep, stress and energy",
-      "Personalised, realistic lifestyle suggestions",
-      "Ongoing review so your plan adapts over time",
-    ],
-    whoItsFor: [
-      "People wanting a natural, whole-person approach",
-      "Anyone juggling several wellbeing concerns at once",
-      "Clients looking for long-term habits rather than quick fixes",
-    ],
-    related: ["counselling", "free-holistic-health-review", "acute-telephone-support"],
-  },
-
-  // 2. REMEDIAL MASSAGE
-  {
+    practitioner: "Edmore",
     slug: "remedial-massage",
     name: "Remedial Massage",
     category: "physical",
@@ -240,15 +173,17 @@ const seeds: ServiceSeed[] = [
     related: ["relaxation-massage", "bowen-therapy", "pregnancy-massage"],
   },
 
-  // 3. RELAXATION MASSAGE
+  // 2. RELAXATION MASSAGE
   {
+    practitioner: "Edmore",
     slug: "relaxation-massage",
     name: "Relaxation Massage",
     category: "physical",
     featured: true,
     ...price(120),
     image: "/images/service-relaxation-massage.png",
-    short: "Gentle, flowing full-body massage designed to soothe the nervous system and melt away stress.",
+    short:
+      "Gentle, flowing full-body massage designed to soothe the nervous system and melt away stress.",
     description:
       "A calming massage that eases everyday stress, relieves physical fatigue, improves circulation, and encourages deep, rejuvenating rest.",
     options: [
@@ -292,15 +227,17 @@ const seeds: ServiceSeed[] = [
     related: ["remedial-massage", "pregnancy-massage"],
   },
 
-  // 4. PREGNANCY MASSAGE
+  // 3. PREGNANCY MASSAGE
   {
+    practitioner: "Edmore",
     slug: "pregnancy-massage",
     name: "Pregnancy Massage",
     category: "physical",
     featured: true,
     ...price(125),
     image: "/images/service-pregnancy.jpg",
-    short: "Specialised prenatal bodywork safely easing pregnancy aches, fluid retention, and back strain.",
+    short:
+      "Specialised prenatal bodywork safely easing pregnancy aches, fluid retention, and back strain.",
     description:
       "Safe, supportive prenatal massage tailored specifically for expectant mothers. Uses nurturing techniques and comfortable positioning to relieve lower back pain, pelvic tightness, and swollen limbs.",
     options: [
@@ -328,31 +265,106 @@ const seeds: ServiceSeed[] = [
       "Reduces swelling and fluid retention in legs and ankles",
       "Provides gentle relaxation and restorative comfort during pregnancy",
     ],
-    whoItsFor: [
-      "Expectant mothers in their second or third trimesters needing physical relief",
-    ],
+    whoItsFor: ["Expectant mothers in their second or third trimesters needing physical relief"],
     related: ["relaxation-massage", "remedial-massage"],
+  },
+
+  // 4. NATUROPATHY (Naturapathy)
+  {
+    practitioner: "Rosanna",
+    slug: "naturopathy",
+    name: "Naturopathy",
+    category: "physical",
+    featured: true,
+    ...price(190),
+    image: "/images/service-naturopathy.jpg",
+    short: "A whole-person look at diet, lifestyle and natural health support.",
+    description: [
+      "Naturopathy is about understanding the whole person, not just treating individual symptoms. With over 35 years of clinical experience, Rosanna Mosca takes a personalised approach to health, exploring the connection between nutrition, lifestyle, emotional wellbeing and physical health.",
+    " Drawing on the Eight Laws of Health, comprehensive naturopathic knowledge and diagnostic tools such as Hair Bioprofile analysis, Rosanna works to identify areas of imbalance and develop an individualised plan to support your body's natural healing processes. Her approach combines traditional natural medicine with practical nutrition guidance, emotional therapies and cutting edge frequency technologies."
+    ],  
+      options: [
+      {
+        id: "nat-discovery",
+        name: "Complimentary Health Discovery Session",
+        durationMins: 30,
+        durationDisplay: "30 mins",
+        priceInCents: 0,
+        priceDisplay: "Free",
+        newClientsOnly: true,
+        note: "A free 20- 30 minute appointment with one of our Naturopaths to help you discover where and why you may be struggling with your health. Understand your health goals, what's been going on , and how we can help you. If we are the right fit we can discuss options including how we work and pricing etc",
+      },
+      // {
+      //   id: "nat-initial",
+      //   name: "Naturopathy - 60 mins",
+      //   durationMins: 60,
+      //   durationDisplay: "60 mins",
+      //   priceInCents: 25000,
+      //   priceDisplay: "$250",
+      //   note: "Your first Naturopathy appointment with Feeling Healthy. All Naturopathy appointments are claimable on private health insurance through our HICAPS machine.",
+      // },
+      {
+        id: "nat-sub-30",
+        name: "Naturopathy - 30 mins",
+        durationMins: 30,
+        durationDisplay: "30 mins",
+        priceInCents: 13000,
+        priceDisplay: "$130",
+        note: "Ongoing consultation to review progress, adjust remedies, and maintain momentum.",
+      },
+      {
+        id: "nat-sub-45",
+        name: "Naturopathy - 45 mins",
+        durationMins: 45,
+        durationDisplay: "45 mins",
+        priceInCents: 19000,
+        priceDisplay: "$190",
+        note: "Follow-up consultation to evaluate remedies and support your ongoing health goals.",
+      },
+      {
+        id: "nat-sub-60",
+        name: "Naturopathy - 60 mins",
+        durationMins: 60,
+        durationDisplay: "60 mins",
+        priceInCents: 25000,
+        priceDisplay: "$250",
+        note: "Comprehensive ongoing consultation for in-depth health review and tailored adjustments.",
+      },
+    ],
+    howItHelps: [
+      "Understand your health: A whole-person approach to exploring your health concerns, health history and potential underlying contributors to imbalance.",
+      "Personalised naturopathic care: Individualised nutrition, natural health and lifestyle recommendations guided by the Eight Laws of Health and your specific needs.",
+      "Support your body's natural healing processes: Practical strategies to nourish your body, support healthy habits, manage stress and improve overall vitality.",
+    ],
+    whoItsFor: [
+      "People wanting a personalised, natural approach to improving their health and wellbeing.",
+      "Anyone experiencing ongoing health concerns who wants to investigate potential underlying factors and take a more proactive approach.",
+      "Individuals ready to make meaningful lifestyle, nutritional and emotional changes with experienced guidance and ongoing support.",
+    ],
+    related: ["counselling", "free-holistic-health-review", "acute-telephone-support"],
   },
 
   // 5. CLINICAL HYPNOSIS
   {
+    practitioner: "Rosanna",
     slug: "clinical-hypnosis",
     name: "Clinical Hypnosis",
     category: "mind",
     featured: true,
-    ...price(190),
+    ...price(250),
     image: "/images/service-hypnosis.jpg",
-    short: "A focused, deeply relaxed state communicating with the subconscious to work on specific goals.",
+    short:
+      "A focused, deeply relaxed state communicating with the subconscious to work on specific goals.",
     description:
       "Clinical hypnotherapy combines hypnosis with psychological treatment. It involves entering a deeply relaxed state where the practitioner communicates with the subconscious mind to address symptoms, habits, and mindset blocks.",
     options: [
       {
         id: "hypno-60",
-        name: "Clinical Hypnosis",
+        name: "Clinical Hypnosis - 60 mins",
         durationMins: 60,
         durationDisplay: "60 mins",
-        priceInCents: 19000,
-        priceDisplay: "$190",
+        priceInCents: 25000,
+        priceDisplay: "$250",
         note: "Clinical hypnotherapy is a combination of hypnosis and a psychological treatment. It involves getting you into a relaxed state where the therapist can communicate with the subconscious part of your mind and make suggestions relevant to your symptoms.",
       },
     ],
@@ -371,45 +383,57 @@ const seeds: ServiceSeed[] = [
 
   // 6. COUNSELLING
   {
+    practitioner: "Rosanna",
     slug: "counselling",
     name: "Counselling",
     category: "mind",
     featured: true,
-    ...price(150),
+    ...price(250),
     image: "/images/service-counselling.jpg",
     short: "A calm, confidential space to talk things through at your own pace.",
     description:
-      "Counselling gives you time and space with someone whose only focus is you. Sessions are led by what matters to you, whether that's something specific or a general sense that things feel harder than they should.",
+      "Counselling with Rosanna Mosca goes beyond simply talking about your problems. With over 35 years of experience in psychotherapy and therapeutic practice, Rosanna combines counselling with techniques such as Thought Field Therapy (TFT), EFT and clinical hypnosis to help you process difficult emotions and change the way you feel and respond to life's challenges. Drawing on the brain's capacity for neuroplasticity, sessions focus on helping you develop new emotional responses, break old patterns and move forward with greater confidence and emotional freedom.",
     options: [
       {
         id: "counsel-60",
-        name: "Counselling",
+        name: "Counselling - 60 mins",
         durationMins: 60,
         durationDisplay: "60 mins",
-        priceInCents: 15000,
-        priceDisplay: "$150",
+        priceInCents: 25000,
+        priceDisplay: "$250",
         note: "A calm, confidential 60-minute space to talk things through at your own pace with Rosanna Mosca.",
       },
+      {
+        id: "counsel-6-sessions",
+        name: "Counselling - 6 sessions package",
+        durationMins: 360,
+        durationDisplay: "360 mins",
+        priceInCents: 125000,
+        priceDisplay: "$1250",
+        note: "Book 6 sessions in advance and save 17% on your counselling journey.",
+      },
     ],
+
     howItHelps: [
-      "A confidential space to talk without judgement",
-      "Support in making sense of difficult feelings or decisions",
-      "Practical ways of coping that fit your life",
+      "A safe, confidential space to explore your thoughts, feelings and experiences without judgement.",
+      "Work beyond talking to help reduce emotional distress, release limiting beliefs and change unhelpful emotional responses.",
+      "Therapeutic techniques that support emotional processing, nervous system regulation and the development of healthier response patterns.",
     ],
     whoItsFor: [
-      "Anyone feeling stressed, low, anxious or stuck",
-      "People going through change, loss or pressure",
-      "Those who prefer talking to being told what to do",
+      "Anyone experiencing stress, anxiety, fear, overwhelm or recurring emotional triggers.",
+      "People carrying past experiences, unresolved emotions or limiting beliefs that continue to affect their present.",
+      "Those ready to break old patterns, build confidence and create meaningful emotional change.",
     ],
     related: ["clinical-hypnosis", "thought-field-therapy"],
   },
 
   // 7. THOUGHT FIELD THERAPY
   {
+    practitioner: "Rosanna",
     slug: "thought-field-therapy",
     name: "Thought Field Therapy",
     category: "mind",
-    ...price(140),
+    ...price(250),
     image: "/images/service-thought-field-therapy.jpg",
     short: "A gentle tapping-based technique used for emotional responses, phobias, and stress.",
     description:
@@ -417,12 +441,21 @@ const seeds: ServiceSeed[] = [
     options: [
       {
         id: "tft-60",
-        name: "Thought Field Therapy",
+        name: "Thought Field Therapy - 60 mins",
         durationMins: 60,
         durationDisplay: "60 mins",
-        priceInCents: 14000,
-        priceDisplay: "$140",
+        priceInCents: 25000,
+        priceDisplay: "$250",
         note: "A gentle 60-minute tapping-based therapy to neutralize emotional distress, fears, phobias, and anxiety.",
+      },
+      {
+        id: "tft-6-sessions",
+        name: "Thought Field Therapy - 6 sessions package",
+        durationMins: 360,
+        durationDisplay: "360 mins",
+        priceInCents: 125000,
+        priceDisplay: "$1250",
+        note: "Book 6 sessions in advance and save 17% on your thought field therapy journey.",
       },
     ],
     howItHelps: [
@@ -440,10 +473,11 @@ const seeds: ServiceSeed[] = [
 
   // 8. OTHER SERVICES: Acute Telephone Support
   {
+    practitioner: "Rosanna",
     slug: "acute-telephone-support",
     name: "Acute Telephone Support",
     category: "other",
-    ...price(45),
+    ...price(60),
     image: "/images/service-acute-telephone.jpg",
     short: "15-minute phone consultation with Rosanna Mosca for urgent advice and remedy guidance.",
     description:
@@ -454,8 +488,8 @@ const seeds: ServiceSeed[] = [
         name: "Acute Telephone Support",
         durationMins: 15,
         durationDisplay: "15 mins",
-        priceInCents: 4500,
-        priceDisplay: "$45",
+        priceInCents: 6000,
+        priceDisplay: "$60",
         note: "A focused 15-minute phone appointment with Rosanna Mosca for acute health questions, dosage adjustments, or prescription refills.",
       },
     ],
@@ -473,12 +507,14 @@ const seeds: ServiceSeed[] = [
 
   // 9. OTHER SERVICES: Bowen Therapy
   {
+    practitioner: "Rosanna",
     slug: "bowen-therapy",
     name: "Bowen Therapy",
     category: "other",
     ...price(110),
     image: "/images/service-bowen-therapy.jpg",
-    short: "Gentle soft-tissue rolling moves stimulating the body's natural self-healing and alignment.",
+    short:
+      "Gentle soft-tissue rolling moves stimulating the body's natural self-healing and alignment.",
     description:
       "Bowen Therapy is a subtle, non-invasive physical therapy performed by Edmore Mahleka. It uses gentle rolling moves over precise muscles, tendons, and ligaments with deliberate pauses to prompt self-healing and structural realignment.",
     options: [
@@ -506,6 +542,7 @@ const seeds: ServiceSeed[] = [
 
   // 10. OTHER SERVICES: Free Holistic Health Review
   {
+    practitioner: "Rosanna",
     slug: "free-holistic-health-review",
     name: "Free Holistic Health Review",
     category: "other",
@@ -541,123 +578,91 @@ const seeds: ServiceSeed[] = [
 
   // 11. PACKAGES: Six Session Transformation Package
   {
+    practitioner: "Rosanna",
     slug: "six-session-transformation",
     name: "Six Session Transformation Package",
     category: "packages",
     featured: true,
     ...price(900),
     image: "/images/service-woman-health.jpg",
-    short: "A 6-session structured transformation journey combining naturopathy, mind-body therapy, and guidance.",
-    description:
-      "A dedicated six-session holistic transformation journey with Rosanna Mosca. Sessions are structured 60-minute consultations tailored step-by-step to address physical vitality, emotional clarity, and sustainable wellness breakthroughs.",
+    short:
+      "A 6-session structured transformation journey combining naturopathy, mind-body therapy, and guidance.",
+    description: [
+      "A personalised six-session health transformation journey with Rosanna Mosca, designed to help you understand your body, overcome obstacles and take practical steps towards better health and wellbeing.",
+      "Across six structured 60-minute consultations, we work together to identify areas that need support and create a personalised approach to improving your physical health, emotional wellbeing and vitality.",
+    ],
     options: [
       {
-        id: "six-sess-1",
-        name: "Session 1",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 15000,
-        priceDisplay: "$150",
-        note: "60 min transformation session with Rosanna Mosca.",
-      },
-      {
-        id: "six-sess-2",
-        name: "Session 2",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 15000,
-        priceDisplay: "$150",
-        note: "60 min transformation session with Rosanna Mosca.",
-      },
-      {
-        id: "six-sess-3",
-        name: "Session 3",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 15000,
-        priceDisplay: "$150",
-        note: "60 min transformation session with Rosanna Mosca.",
-      },
-      {
-        id: "six-sess-4",
-        name: "Session 4",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 15000,
-        priceDisplay: "$150",
-        note: "60 min transformation session with Rosanna Mosca.",
-      },
-      {
-        id: "six-sess-5",
-        name: "Session 5",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 15000,
-        priceDisplay: "$150",
-        note: "60 min transformation session with Rosanna Mosca.",
-      },
-      {
-        id: "six-sess-6",
-        name: "Session 6",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 15000,
-        priceDisplay: "$150",
-        note: "60 min transformation session with Rosanna Mosca.",
+        id: "six-sessions",
+        name: "6 Sessions Transformation Package",
+        durationMins: 360,
+        durationDisplay: "360 mins",
+        priceInCents: 125000,
+        priceDisplay: "$1250",
+        note: "6 x 60-minute transformation sessions with Rosanna Mosca tailored to your changing needs.",
       },
     ],
     howItHelps: [
-      "Structured progression tackling physical and emotional obstacles step-by-step",
-      "Combines naturopathic guidance, clinical hypnosis, and counselling for lasting change",
-      "Regular accountability and tailored adaptations keeping you on track",
+      "Naturopathic guidance based on the Eight Laws of Health, incorporating the foundations of natural health and wellbeing.",
+      "Practical nutrition and lifestyle strategies to help nourish your body, support its natural healing processes and build healthier habits.",
+      "Tools and techniques to help address emotional obstacles, stress and patterns that may be holding you back.",
+      "Individualised support drawing on Rosanna's extensive experience in naturopathy, psychotherapy and clinical therapies, including hypnosis where appropriate.",
+      "Structured progression and accountability with practical steps and guidance tailored to your changing needs throughout the six sessions.",
     ],
     whoItsFor: [
-      "Individuals committed to a structured 6-step health transformation",
-      "Anyone desiring consistent, personalized guidance across body and mind",
+      "Individuals ready to take a more proactive approach to their health and wellbeing.",
+      "Those wanting to understand the underlying factors contributing to their health concerns.",
+      "Anyone seeking personalised naturopathic guidance, practical tools and ongoing support to create lasting lifestyle changes.",
+      "People who want to invest in themselves and build a stronger foundation for long-term health and vitality.",
     ],
+    brief: "Your health journey is individual. Your treatment plan should be too.",
     related: ["twelve-session-transformation", "clinical-hypnosis", "naturopathy"],
   },
 
   // 12. PACKAGES: Twelve Session Transformation Package
   {
+    practitioner: "Rosanna",
     slug: "twelve-session-transformation",
     name: "Twelve Session Transformation Package",
     category: "packages",
     featured: true,
-    ...price(1680),
+    ...price(220000),
     image: "/images/service-woman-health.jpg",
-    short: "A comprehensive 12-session programme for profound, long-term health and mindset breakthroughs.",
-    description:
-      "A complete twelve-session transformation programme with Rosanna Mosca providing in-depth support, natural therapies, and mindset rebalancing. Delivers deep holistic rehabilitation over a dedicated 12-session lifecycle.",
+    short:
+      "A comprehensive 12-session programme for profound, long-term health and mindset breakthroughs.",
+    description: [
+      "A deeper journey towards lasting health, healing and personal transformation.",
+      "A comprehensive 12-session personalised health and transformation program with Rosanna Mosca, drawing on over 35 years of experience in naturopathy, psychotherapy and holistic health.",
+      "This program takes a whole-person approach, exploring the connection between physical health, nutrition, emotional wellbeing and mindset. Together, we work to identify underlying factors contributing to your health challenges, address obstacles that may be holding you back and create meaningful, sustainable changes.",
+      "Each session builds on the last, combining naturopathic guidance based on the Eight Laws of Health, personalised nutrition and lifestyle strategies, emotional support and practical tools to help you understand and support your body's natural healing processes.",
+    ],
     options: [
       {
-        id: "twelve-sess-1",
-        name: "Session 1",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 14000,
-        priceDisplay: "$140",
-        note: "60 min transformation session with Rosanna Mosca.",
-      },
-      {
-        id: "twelve-sess-followup",
-        name: "Ongoing Session (Sessions 2–12)",
-        durationMins: 60,
-        durationDisplay: "60 mins",
-        priceInCents: 14000,
-        priceDisplay: "$140",
-        note: "60 min transformation session with Rosanna Mosca.",
+        id: "twelve-sessions",
+        name: "12 Sessions Transformation Package",
+        durationMins: 720,
+        durationDisplay: "720 mins",
+        priceInCents: 220000,
+        priceDisplay: "$2200",
+        note: "12 x 60-minute transformation sessions with Rosanna Mosca tailored to your changing needs.",
       },
     ],
     howItHelps: [
-      "Complete holistic rehabilitation over a dedicated 12-session lifecycle",
-      "Addresses deep-seated health challenges, lifestyle habits, and subconscious beliefs",
-      "Comprehensive natural medicine support tailored every step of the journey",
+      "Comprehensive naturopathic guidance based on the Eight Laws of Health, with practical strategies for nutrition, lifestyle and overall wellbeing.",
+      "Individualised health support using appropriate assessment and diagnostic tools, including Hair Bioprofile analysis, to help identify areas of imbalance.",
+      "Emotional and mindset transformation using techniques drawn from TFT, EFT, psychotherapy and clinical hypnosis where appropriate.",
+      "Practical tools for lasting change to help you address stress, emotional patterns, self-sabotage and lifestyle habits.",
+      "Ongoing personalised support with a structured approach that evolves as your needs and progress change.",
+      "Whole-person wellness integrating natural therapies and frequency technologies, including PEMF, where appropriate.",
     ],
     whoItsFor: [
-      "Clients desiring complete, supported transformation of their health and wellbeing",
-      "People navigating complex, long-standing health challenges",
+      "Individuals ready to make a deeper commitment to their health and wellbeing.",
+      "Those experiencing ongoing or complex health challenges who want a more comprehensive, individualised approach.",
+      "People who recognise that emotional wellbeing, mindset and lifestyle can influence their health journey.",
+      "Anyone wanting to break old patterns, develop healthier habits and build a stronger foundation for long-term vitality.",
     ],
+    brief:
+      "This is more than a series of consultations. It's an opportunity to understand your health, reconnect with your body and create meaningful changes that support you for years to come.",
     related: ["six-session-transformation", "clinical-hypnosis", "counselling"],
   },
 
@@ -953,7 +958,7 @@ export const services: Service[] = seeds.map((seed) => ({
       priceDisplay: seed.priceDisplay,
     },
   ],
-  whatToExpect: seed.whatToExpect ?? defaultExpect(seed.name),
+  whatToExpect: seed.whatToExpect ?? defaultExpect(seed.name,seed.practitioner),
   faqs: seed.faqs ?? defaultFaqs(seed.name),
 }));
 

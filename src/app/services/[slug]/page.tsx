@@ -85,7 +85,12 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <Button className="w-full sm:w-auto" asChild size="default">
                   <Link href={bookCta.to}>{bookCta.label}</Link>
                 </Button>
-                <Button className="w-full sm:w-auto border-0 text-ink-foreground/70" asChild variant="onDark" size="default">
+                <Button
+                  className="w-full sm:w-auto border-0 text-ink-foreground/70"
+                  asChild
+                  variant="onDark"
+                  size="default"
+                >
                   <Link href="/contact">Ask a Question</Link>
                 </Button>
               </div>
@@ -112,12 +117,26 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="container-page grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <Reveal>
             <h2 className="text-2xl font-semibold md:text-3xl">About {service.name}</h2>
-            <p className="mt-4 leading-relaxed text-muted-foreground">{service.description}</p>
+            <div className="mt-4 space-y-4 leading-relaxed text-muted-foreground">
+              {Array.isArray(service.description) ? (
+                service.description.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))
+              ) : (
+                service.description
+                  .split("\n")
+                  .map((p) => p.trim())
+                  .filter(Boolean)
+                  .map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))
+              )}
+            </div>
 
             <h3 className="mt-10 font-display text-xl font-semibold">How it may help</h3>
             <ul className="mt-4 grid gap-3">
               {service.howItHelps.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed">
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
                   <Check className="mt-0.5 size-4 shrink-0 text-foreground" />
                   {item}
                 </li>
@@ -127,12 +146,15 @@ export default async function ServiceDetailPage({ params }: Props) {
             <h3 className="mt-10 font-display text-xl font-semibold">Who it's for</h3>
             <ul className="mt-4 grid gap-3">
               {service.whoItsFor.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed">
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
                   <Check className="mt-0.5 size-4 shrink-0 text-foreground" />
                   {item}
                 </li>
               ))}
             </ul>
+            <li className="mt-4 flex gap-3 text-xl text-slate-600 font-script leading-relaxed">
+                  {service.brief}
+                </li>
             <p className="mt-8 rounded-sm bg-sand p-5 text-xs leading-relaxed text-muted-foreground">
               This page describes our general approach and does not make claims about medical
               outcomes. If you have a medical concern, please also speak with your GP.
@@ -167,13 +189,13 @@ export default async function ServiceDetailPage({ params }: Props) {
                           <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground font-medium">
                             <span className="text-foreground">⏱ {opt.durationDisplay}</span>
                             <span>•</span>
-                            <span className="font-bold text-foreground text-sm">{opt.priceDisplay}</span>
+                            <span className="font-bold text-foreground text-sm">
+                              {opt.priceDisplay}
+                            </span>
                           </div>
                         </div>
                         <Button asChild size="sm" className="shrink-0">
-                          <Link href={`/book?service=${service.slug}&option=${opt.id}`}>
-                            Book
-                          </Link>
+                          <Link href={`/book?service=${service.slug}&option=${opt.id}`}>Book</Link>
                         </Button>
                       </div>
                       {opt.note && (

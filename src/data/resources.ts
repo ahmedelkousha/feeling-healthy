@@ -104,7 +104,7 @@ export const generalFaqs: Faq[] = [
   {
     question: "What are your clinic hours?",
     answer:
-      "We are open Monday through Saturday from 9:00 AM to 5:00 PM. Appointments outside regular hours can be arranged by contacting our reception.",
+      "We are open Monday through Friday from 9:00 AM to 3:00 PM. Appointments outside regular hours can be arranged by contacting our reception.",
   },
   {
     question: "How do I book an appointment?",
