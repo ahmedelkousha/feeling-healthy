@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
+import { addInquiry } from "@/lib/firebase/services";
+import { ChevronDown } from "lucide-react";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(100),
@@ -21,13 +23,15 @@ const schema = z.object({
 type Errors = Partial<Record<keyof z.infer<typeof schema>, string>>;
 
 export function ContactForm() {
-  const [errors, setErrors] = useState<Errors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState<Errors>({});
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const result = schema.safeParse(Object.fromEntries(form));
+    const data = Object.fromEntries(form);
+    const result = schema.safeParse(data);
 
     if (!result.success) {
       const next: Errors = {};
@@ -40,20 +44,36 @@ export function ContactForm() {
     }
 
     setErrors({});
-    setSent(true);
-    toast.success("Message ready to send", {
-      description: "Message delivery isn't connected yet — no email has been sent.",
-    });
+    setIsSubmitting(true);
+
+    try {
+      await addInquiry({
+        name: result.data.name,
+        email: result.data.email,
+        phone: result.data.phone || "",
+        service: result.data.service || "",
+        message: result.data.message,
+      });
+
+      setSent(true);
+      toast.success("Message sent successfully!", {
+        description: "Our clinic team will get back to you shortly.",
+      });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to submit enquiry. Please call us.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (sent) {
     return (
       <div className="rounded-lg bg-card p-8 shadow-soft" role="status">
         <p className="script-accent text-2xl">Thank you</p>
-        <h3 className="mt-3 text-xl font-semibold">Your details have been captured</h3>
+        <h3 className="mt-3 text-xl font-semibold">Your message has been received</h3>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          This form is not yet connected to email delivery, so nothing has been sent to the clinic.
-          Please call {site.contact.phone} if your enquiry is urgent.
+          We have recorded your enquiry and a member of the Feeling Healthy team will be in touch
+          soon. If your request is urgent, please feel free to call us at {site.contact.phone}.
         </p>
         <Button variant="outline" className="mt-6" onClick={() => setSent(false)}>
           Send another message
@@ -68,13 +88,15 @@ export function ContactForm() {
         <Field label="Name" name="name" error={errors.name} required />
         <Field label="Email" name="email" type="email" error={errors.email} required />
         <Field label="Phone" name="phone" type="tel" error={errors.phone} />
-        <div className="grid gap-2">
+        <div className="grid gap-2 relative">
+          <ChevronDown className="absolute size-4 text-ink right-3 top-[52%]" />
+
           <Label htmlFor="service">Service of interest</Label>
           <select
             id="service"
             name="service"
             defaultValue=""
-            className="h-11 rounded-sm border border-input bg-background px-3 text-sm"
+            className="h-9 rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand appearance-none"
           >
             <option value="">Not sure yet</option>
             {services.map((s) => (
@@ -90,7 +112,7 @@ export function ContactForm() {
         <Label htmlFor="message">
           Message <span aria-hidden="true">*</span>
         </Label>
-        <Textarea id="message" name="message" rows={5} maxLength={1000} className="rounded-sm" />
+        <Textarea id="message" name="message" rows={5} maxLength={1000} className="rounded-lg" />
         {errors.message ? (
           <p className="text-sm text-destructive" role="alert">
             {errors.message}
@@ -98,8 +120,8 @@ export function ContactForm() {
         ) : null}
       </div>
 
-      <Button type="submit" size="lg" className="mt-6 w-full sm:w-auto">
-        Send Message
+      <Button type="submit" size="lg" disabled={isSubmitting} className="mt-6 w-full sm:w-auto">
+        {isSubmitting ? "Sending..." : "Send Message"}
       </Button>
     </form>
   );
@@ -123,7 +145,7 @@ function Field({
       <Label htmlFor={name}>
         {label} {required ? <span aria-hidden="true">*</span> : null}
       </Label>
-      <Input id={name} name={name} type={type} className="h-11 rounded-sm" />
+      <Input id={name} name={name} type={type} className="h-9 rounded-lg" />
       {error ? (
         <p className="text-sm text-destructive" role="alert">
           {error}

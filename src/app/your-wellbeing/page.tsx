@@ -52,7 +52,9 @@ export default function WellbeingIndexPage() {
                 />
                 <div className="flex flex-1 flex-col p-6">
                   <h2 className="text-xl font-semibold">{area.name}</h2>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{area.intro}</p>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    {area.intro}
+                  </p>
                   <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium">
                     Explore support
                     <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />

@@ -6,20 +6,24 @@ import { site } from "@/data/site";
 import { featuredServices } from "@/data/services";
 import { wellbeingAreas } from "@/data/wellbeing";
 import { useLinkClickEvent } from "@/hooks/useLinkClickEvent";
+import { usePathname } from "next/navigation";
 
 const socialIcons = { Facebook, Instagram, LinkedIn: Linkedin } as const;
 
 export function Footer() {
+  const pathname = usePathname();
   const handleLinkClick = useLinkClickEvent();
 
   return (
-    <footer className="bg-ink text-ink-foreground">
+    <footer className={`bg-ink text-ink-foreground ${pathname?.startsWith('/admin') ? 'hidden' : 'block'}`}>
       <div className="container-page grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-5 lg:py-20">
         <div className="lg:col-span-1">
           <Link href="/" onClick={(e) => handleLinkClick(e, "/")} aria-label={`${site.name} home`}>
             <img src="/images/logo.png" alt={site.name} className="h-18 w-auto object-contain" />
           </Link>
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-foreground/70">{site.tagline}</p>
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-foreground/70">
+            {site.tagline}
+          </p>
           <div className="mt-6 flex gap-2">
             {site.social.map((s) => {
               const Icon = socialIcons[s.label as keyof typeof socialIcons];
@@ -52,10 +56,8 @@ export function Footer() {
             <FooterLink key={a.slug} href={`/your-wellbeing/${a.slug}`}>
               {a.name}
             </FooterLink>
-
           ))}
           <FooterLink href="/pemf-thz">PEMF / THz Therapy</FooterLink>
-
         </FooterColumn>
 
         <FooterColumn title="About">
@@ -106,11 +108,25 @@ export function Footer() {
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" onClick={(e) => handleLinkClick(e, "/privacy")} className="hover:text-ink-foreground">
+            <Link
+              href="/privacy"
+              onClick={(e) => handleLinkClick(e, "/privacy")}
+              className="hover:text-ink-foreground"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms" onClick={(e) => handleLinkClick(e, "/terms")} className="hover:text-ink-foreground">
+            <Link
+              href="/terms"
+              onClick={(e) => handleLinkClick(e, "/terms")}
+              className="hover:text-ink-foreground"
+            >
               Terms &amp; Conditions
+            </Link>
+            <Link
+              href="/admin"
+              className="hover:text-ink-foreground text-ink-foreground/40 hover:underline"
+            >
+              Admin Portal
             </Link>
           </div>
         </div>

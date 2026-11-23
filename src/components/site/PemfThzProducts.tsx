@@ -1,25 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { Check, ShoppingBag, Sparkles, Info, ArrowDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Check, ShoppingBag, Info, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { pemfThzProducts, type PemfThzProduct } from "@/data/pemfThz";
-import { cn } from "@/lib/utils";
+import { getProducts } from "@/lib/firebase/services";
 
 interface PemfThzProductsProps {
   onSelectProduct: (productId: string) => void;
 }
 
 export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
+  const [items, setItems] = useState<PemfThzProduct[]>(pemfThzProducts);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [activeModalProduct, setActiveModalProduct] = useState<PemfThzProduct | null>(null);
 
-  const categories = ["All", "Terahertz", "PEMF", "Dual-Tech"];
+  useEffect(() => {
+    getProducts()
+      .then((res) => {
+        if (res && res.length > 0) setItems(res);
+      })
+      .catch(() => {});
+  }, []);
 
   const filteredProducts =
-    selectedCategory === "All"
-      ? pemfThzProducts
-      : pemfThzProducts.filter((p) => p.category === selectedCategory);
+    selectedCategory === "All" ? items : items.filter((p) => p.category === selectedCategory);
 
   const handleOrderClick = (productId: string) => {
     onSelectProduct(productId);
@@ -30,63 +35,45 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
   };
 
   return (
-    <section id="products" className="py-4">
-      {/* Category Filter Pills */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            type="button"
-            onClick={() => setSelectedCategory(cat)}
-            className={cn(
-              "px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer",
-              selectedCategory === cat
-                ? "bg-brand text-brand-foreground shadow-sm scale-105"
-                : "bg-sand text-muted-foreground hover:bg-sand/70",
-            )}
-          >
-            {cat === "All" ? "All Products" : `${cat} Series`}
-          </button>
-        ))}
-      </div>
+    <section id="products" className="py-4 md:scroll-mt-90 scroll-mt-76">
 
       {/* Product Cards Grid */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="group flex flex-col justify-between overflow-hidden rounded-lg border-2 border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:shadow-lift hover:border-brand/50"
+            className="relative flex flex-col justify-between overflow-hidden rounded-xl border-2 border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:shadow-lift hover:border-brand/50"
           >
+            {/* <div className="absolute top-5 left-5  flex flex-wrap gap-1.5 z-10">
+              {product.badge && (
+                <span className="rounded-full bg-brand px-3 py-1 text-[0.7rem] font-bold text-brand-foreground shadow-sm">
+                  {product.badge}
+                </span>
+              )}
+              <span className="rounded-full bg-ink/80 backdrop-blur-md px-2.5 py-1 text-[0.68rem] font-medium text-ink-foreground">
+                {product.category}
+              </span>
+            </div> */}
             <div>
               {/* Product Image & Badges */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-sand/40">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="size-full object-cover transition-transform duration-500"
                   loading="lazy"
                 />
-                <div className="absolute top-1 left-3 flex flex-wrap gap-1.5 z-10">
-                  {product.badge && (
-                    <span className="rounded-full bg-brand px-3 py-1 text-[0.7rem] font-bold text-brand-foreground shadow-sm">
-                      {product.badge}
-                    </span>
-                  )}
-                  <span className="rounded-full bg-ink/80 backdrop-blur-md px-2.5 py-1 text-[0.68rem] font-medium text-ink-foreground">
-                    {product.category}
-                  </span>
-                </div>
               </div>
 
               {/* Title & Price */}
-              <div className="mt-5 flex items-start justify-between gap-2">
+              <div className="mt-5 flex items-center justify-between gap-2">
                 <div>
-                  <h3 className="font-display text-lg font-bold leading-snug text-foreground">
+                  <h3 className="font-display text-base md:text-lg font-bold leading-snug text-foreground">
                     {product.name}
                   </h3>
-                  <p className="text-xs text-muted-foreground font-medium mt-0.5">{product.tagline}</p>
+                  {/* <p className="text-xs text-muted-foreground font-medium mt-0.5">{product.tagline}</p> */}
                 </div>
-                <span className="shrink-0 rounded-lg bg-sand px-3 py-1 text-sm font-extrabold text-brand-dark">
+                <span className="shrink-0 rounded-lg bg-sand px-3 py-1 text-sm font-extrabold text-brand-foreground/90">
                   {product.price}
                 </span>
               </div>
@@ -115,11 +102,11 @@ export function PemfThzProducts({ onSelectProduct }: PemfThzProductsProps) {
             <div className="mt-6 pt-4 border-t border-border/60 flex flex-col gap-2">
               <Button
                 onClick={() => handleOrderClick(product.id)}
-                className="w-full gap-2 font-semibold shadow-sm cursor-pointer"
+                className="w-full gap-2 font-semibold shadow-sm"
                 size="default"
               >
                 <ShoppingBag className="size-4" />
-                <span>Order {product.name.split(" ")[0]}</span>
+                <span>Order Now</span>
                 <ArrowDown className="size-3.5 ml-auto opacity-70" />
               </Button>
 

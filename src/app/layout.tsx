@@ -34,9 +34,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://feeling-healthy.vercel.app"
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://feeling-healthy.vercel.app"),
   title: "Feeling Healthy — Holistic Health & Wellbeing",
   description:
     "Feeling Healthy is a holistic health and wellbeing centre offering massage, counselling, naturopathy, nutrition and more.",
@@ -75,7 +73,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en" data-scroll-behavior="smooth"
+      lang="en"
+      data-scroll-behavior="smooth"
       className={`${fontSora.variable} ${fontDmSans.variable} ${fontCaveat.variable}`}
     >
       <body>

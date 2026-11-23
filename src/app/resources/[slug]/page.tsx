@@ -4,19 +4,22 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { Section } from "@/components/site/Section";
 import { Reveal } from "@/components/site/Reveal";
 import { CtaSection } from "@/components/site/CtaSection";
-import { getArticle, articles } from "@/data/resources";
+import { articles } from "@/data/resources";
+import { getBlogs } from "@/lib/firebase/services";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
 export async function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+  const blogs = await getBlogs();
+  return blogs.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const blogs = await getBlogs();
+  const article = blogs.find((a) => a.slug === slug);
   if (!article) {
     return { title: "Unavailable — Feeling Healthy", robots: { index: false } };
   }
@@ -38,7 +41,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const blogs = await getBlogs();
+  const article = blogs.find((a) => a.slug === slug);
   if (!article) notFound();
 
   return (

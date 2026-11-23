@@ -6,9 +6,9 @@ export type Crumb = { label: string; href?: string; to?: string };
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+      <ol className="flex flex-wrap items-center gap-1.5 text-xs text-ink-foreground/70">
         <li>
-          <Link href="/" className="hover:text-foreground">
+          <Link href="/" className="hover:text-ink-foreground/50">
             Home
           </Link>
         </li>
@@ -18,11 +18,11 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
             <li key={item.label} className="flex items-center gap-1.5">
               <ChevronRight className="size-3.5 shrink-0" aria-hidden="true" />
               {href && i < items.length - 1 ? (
-                <Link href={href} className="hover:text-foreground">
+                <Link href={href} className="hover:text-ink-foreground/50">
                   {item.label}
                 </Link>
               ) : (
-                <span aria-current="page" className="font-medium text-foreground">
+                <span aria-current="page" className="font-medium text-ink-foreground/50 cursor-default">
                   {item.label}
                 </span>
               )}

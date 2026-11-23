@@ -24,12 +24,12 @@ export function CtaSection({
         <Reveal className="mx-auto max-w-2xl">
           <p className="script-accent text-2xl">Feeling Healthy</p>
           <h2 className="mt-4 text-3xl leading-[1.08] font-semibold md:text-5xl">{title}</h2>
-          <p className="mt-4 text-base text-brand-foreground/80 md:text-lg">{description}</p>
+          <p className="mt-4 text-sm text-brand-foreground/80 md:text-base">{description}</p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
-            <Button className="sm:w-auto w-full" asChild variant="ink" size="lg">
+            <Button className="sm:w-auto w-full" asChild variant="ink" size="default">
               <Link href={bookCta.to}>{bookCta.label}</Link>
             </Button>
-            <Button className="sm:w-auto w-full" asChild variant="onBrand" size="lg">
+            <Button className="sm:w-auto w-full" asChild variant="onBrand" size="default">
               <Link href="/contact">Contact Us</Link>
             </Button>
           </div>

@@ -52,7 +52,7 @@ export default async function PractitionerProfilePage({ params }: Props) {
 
   return (
     <>
-      <section className="bg-sand pt-10 pb-14 md:pb-20">
+      <section className="bg-ink pt-32 pb-14 md:pb-10">
         <div className="container-page">
           <Breadcrumbs
             items={[{ label: "Practitioners", href: "/practitioners" }, { label: practitioner.name }]}
@@ -71,7 +71,7 @@ export default async function PractitionerProfilePage({ params }: Props) {
             </Reveal>
             <Reveal delay={90}>
               <p className="eyebrow">Our Practitioner</p>
-              <h1 className="mt-3 text-3xl leading-tight font-semibold md:text-5xl">
+              <h1 className="mt-3 text-3xl leading-tight font-semibold md:text-5xl text-ink-foreground/90">
                 {practitioner.name}
               </h1>
               <p className="mt-2 text-lg font-medium text-muted-foreground">{practitioner.title}</p>

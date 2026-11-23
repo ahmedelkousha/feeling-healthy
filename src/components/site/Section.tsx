@@ -57,7 +57,7 @@ export function SectionHeading({
         {script ? <span className="script-accent ml-2 align-baseline">{script}</span> : null}
       </h2>
       {description ? (
-        <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-lg">{description}</p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">{description}</p>
       ) : null}
     </Reveal>
   );

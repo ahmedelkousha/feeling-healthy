@@ -10,7 +10,7 @@ export const site = {
     phone: "(07) 5607 4152",
     email: "reception@feelinghealthy.com.au",
     openingHours: [
-      { days: "Monday – Saturday", hours: "9:00 AM – 5:00 PM" },
+      { days: "Monday – Friday", hours: "9:00 AM – 3:00 PM" },
       { days: "Sunday", hours: "Closed" },
     ],
     mapsQuery: "17 Bay St, Tweed Heads NSW 2485",

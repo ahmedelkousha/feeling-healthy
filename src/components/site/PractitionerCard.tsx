@@ -6,7 +6,7 @@ export function PractitionerCard({ practitioner }: { practitioner: Practitioner 
   return (
     <Link
       href={`/practitioners/${practitioner.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-lg bg-card shadow-soft transition-all duration-500 ease-[var(--ease-calm)] hover:-translate-y-1 hover:shadow-lift"
+      className="group flex h-full flex-col overflow-hidden rounded-lg bg-card shadow-soft transition-all duration-500 ease-[var(--ease-calm)] hover:shadow-lift"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-sand">
         <img

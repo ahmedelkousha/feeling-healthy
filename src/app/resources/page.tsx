@@ -6,7 +6,8 @@ import { Section, SectionHeading } from "@/components/site/Section";
 import { Reveal } from "@/components/site/Reveal";
 import { FaqAccordion } from "@/components/site/FaqAccordion";
 import { CtaSection } from "@/components/site/CtaSection";
-import { articles, generalFaqs } from "@/data/resources";
+import { generalFaqs } from "@/data/resources";
+import { getBlogs } from "@/lib/firebase/services";
 
 const title = "Resources, Guides & FAQs — Feeling Healthy";
 const description =
@@ -26,7 +27,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  const articles = await getBlogs();
+
   return (
     <>
       <PageHero

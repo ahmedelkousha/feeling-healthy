@@ -92,9 +92,13 @@ export function ServiceQuickViewModal({ service, isOpen, onClose }: ServiceQuick
             </div>
 
             {/* Brief Paragraph */}
-            <p className="text-[13px] text-foreground/80 leading-relaxed font-normal">
-              {service.description || service.short}
-            </p>
+            <div className="text-[13px] text-foreground/80 leading-relaxed font-normal space-y-2">
+              {Array.isArray(service.description) ? (
+                service.description.map((para, i) => <p key={i}>{para}</p>)
+              ) : (
+                <p>{service.description || service.short}</p>
+              )}
+            </div>
 
             {/* Actions */}
             <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-3">
@@ -104,7 +108,12 @@ export function ServiceQuickViewModal({ service, isOpen, onClose }: ServiceQuick
                 </Link>
               </Button>
 
-              <Button variant="default" size="sm" onClick={onClose} className="text-xs text-muted-foreground">
+              <Button
+                variant="default"
+                size="sm"
+                onClick={onClose}
+                className="text-xs text-muted-foreground"
+              >
                 Close
               </Button>
             </div>
@@ -112,6 +121,6 @@ export function ServiceQuickViewModal({ service, isOpen, onClose }: ServiceQuick
         </div>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 }

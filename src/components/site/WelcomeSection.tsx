@@ -33,7 +33,7 @@ export function WelcomeSection() {
             Renew &amp; Refresh Your Vitality
           </h2>
 
-          <p className="mt-6 text-xs sm:text-sm md:text-base text-brand-foreground/90 leading-relaxed max-w-2xl mx-auto font-medium">
+          <p className="mt-6 text-sm sm:text-sm md:text-base text-brand-foreground/90 leading-relaxed max-w-2xl mx-auto font-medium">
             Feeling Healthy is a Wellness Hub – located in Tweed Heads, only steps away from Coolangatta. We are passionate about quality therapeutic services, tailored to achieving your health and wellness goals.
           </p>
 
